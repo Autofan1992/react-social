@@ -1,0 +1,25 @@
+.thumbImg img {
+  height: 400px;
+  width: 100%;
+}
+
+.authorInfo {
+  padding: 15px;
+  margin: 0 0 30px;
+
+  .topInfo {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: 5fr 7fr;
+    margin: 0 0 15px;
+    .fieldBlock {
+      &:not(:first-of-type) {
+        margin-top: 20px;
+      }
+    }
+  }
+
+  .contacts a {
+    padding-right: 20px;
+  }
+}

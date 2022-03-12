@@ -1,0 +1,11 @@
+.postItem {
+  &:not(:first-of-type) {
+    margin-top: 20px;
+  }
+
+  .avatar {
+    max-width: 100px;
+    margin: 0 25px 0 0;
+    flex: 0 0 auto;
+  }
+}

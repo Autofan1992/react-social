@@ -1,0 +1,23 @@
+.navMenu {
+    padding: 15px;
+    grid-area:  m;
+    background-color: #07B568;
+}
+
+.item {
+    text-decoration: none;
+    display: block;
+    color: #fff;
+}
+
+.item.active {
+    color: gold;
+}
+
+.item:not(:first-of-type) {
+    margin-top: 10px;
+}
+
+.item:last-of-type {
+    margin-bottom: 40px;
+}

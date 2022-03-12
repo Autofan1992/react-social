@@ -1,0 +1,32 @@
+.dsRow {
+  display: grid;
+  grid-template-columns: 3fr 9fr;
+  grid-gap: 15px;
+}
+
+.sidebar {
+  padding: 15px;
+  background-color: lightblue;
+}
+
+.minTitle {
+  color: #fff;
+}
+
+.sidebar {
+  .dialogs {
+    .dialogItem {
+      &:not(:first-of-type) {
+        margin-top: 10px;
+      }
+
+      .activeDialog {
+        color: gold;
+      }
+
+      a, button {
+        color: #fff;
+      }
+    }
+  }
+}

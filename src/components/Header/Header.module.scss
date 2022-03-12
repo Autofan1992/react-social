@@ -1,0 +1,49 @@
+.header {
+  background-color: #07B568;
+  padding: 10px 15px;
+  grid-area: h;
+  display: grid;
+  align-items: center;
+  grid-template-areas: "hl hr";
+
+  .logoBlock {
+    max-width: 80px;
+    grid-area: hl;
+  }
+
+  .loginBlock {
+    grid-area: hr;
+    text-align: right;
+    color: #fff;
+
+    img {
+      max-width: 50px;
+      width: 100%;
+    }
+
+    a, button {
+      color: #fff;
+    }
+
+    .userInfo {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      .avatar {
+        margin: 0 15px 0 0;
+        flex: 0 0 auto;
+
+        img {
+          -webkit-border-radius: 50%;
+          -moz-border-radius: 50%;
+          border-radius: 50%;
+        }
+      }
+
+      p {
+        margin: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+.usersList {
+  padding: 15px;
+}
+
+.userBlock {
+  display: grid;
+  grid-template-columns: 2fr 10fr;
+  grid-gap: 15px;
+
+  &:not(:first-of-type) {
+    margin-top: 30px;
+  }
+
+  .userItem {
+    display: flex;
+    flex-direction: column;
+
+    div:not(:first-of-type) {
+      margin-top: 20px;
+    }
+
+    &.itemRight {
+      text-align: right;
+    }
+  }
+
+  .userLeft {
+    text-align: center;
+
+    div:not(:first-of-type) {
+      margin-top: 10px;
+    }
+
+    .profileAvatar {
+      margin: auto;
+      display: block;
+      max-width: 70px;
+    }
+  }
+
+  .userRight {
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #4561a7;
+    display: flex;
+    align-items: flex-start;
+    flex: 1;
+    max-width: 400px;
+    justify-content: space-between;
+  }
+}
