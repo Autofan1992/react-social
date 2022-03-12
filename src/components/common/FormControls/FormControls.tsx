@@ -39,12 +39,19 @@ export const Input: FC<WrappedFieldProps> = ({ input, ...props }) => {
 export const CheckBox: FC<WrappedFieldProps> = ({ input, ...props }) => {
     return (
         <FormControl {...props}>
-            <input {...input} {...props} type="checkbox" checked={input.value}/>
+            <input {...input} {...props} checked={input.value}/>
         </FormControl>
     )
 }
 
-export const createField = (placeholder: string, name: string, validators: Array<FieldValidatorType>, component: string | FC, props = {}, text = '') => (
+export const createField = <KeysType extends string>(
+    placeholder: string | undefined,
+    name: KeysType,
+    validators: Array<FieldValidatorType>,
+    component: string | FC<WrappedFieldProps>,
+    props = {},
+    text = '') => (
+
     <div>
         <Field name={name} validate={validators} component={component} {...props} />
         {text}

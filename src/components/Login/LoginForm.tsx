@@ -1,5 +1,5 @@
-import { Field, InjectedFormProps, reduxForm } from 'redux-form'
-import { Input } from '../common/FormControls/FormControls'
+import { InjectedFormProps, reduxForm } from 'redux-form'
+import { createField, Input } from '../common/FormControls/FormControls'
 import { requiredField } from '../../redux/utilities/validators/validators'
 import { ProfileType } from '../../types/types'
 import { FC } from 'react'
@@ -8,31 +8,21 @@ type PropsType = {
     captcha: string | null
 }
 
+type LoginFormInputNamesTypeKeys = keyof ProfileType
+
 const LoginForm: FC<InjectedFormProps<ProfileType, PropsType> & PropsType> = ({ handleSubmit, error, captcha }) => {
     return (
         <form onSubmit={handleSubmit}>
             <div className="inputBlocks my-3">
                 <div className="input-block">
-                    <Field
-                        component={Input}
-                        validate={[requiredField]}
-                        name={'email'} type={'email'} placeholder="Email"
-                    />
+                    {createField<LoginFormInputNamesTypeKeys>('Email', 'email', [requiredField], Input, {type: 'email'})}
                 </div>
                 <div className="input-block my-3">
-                    <Field
-                        component={Input}
-                        validate={[requiredField]}
-                        name={'password'} type={'password'} placeholder="Password"
-                    />
+                    {createField<LoginFormInputNamesTypeKeys>('Password', 'password', [requiredField], Input, {type: 'password'})}
                 </div>
                 <div className="input-block form-check">
                     <label className="form-check-label">
-                        <Field
-                            className="form-check-input"
-                            name={'rememberMe'}
-                            component={'input'} type={'checkbox'}
-                        />
+                        {createField<LoginFormInputNamesTypeKeys>(undefined, 'rememberMe', [], Input, {type: 'checkbox'})}
                         <p className="mb-0">Запомнить меня</p>
                     </label>
                 </div>
@@ -44,7 +34,7 @@ const LoginForm: FC<InjectedFormProps<ProfileType, PropsType> & PropsType> = ({ 
                 {captcha &&
                     <div className="input-block">
                         <div className="my-3"><img src={captcha} alt=""/></div>
-                        <Field name={'captcha'} component={'input'} type={'text'} validate={[requiredField]}/>
+                        {createField<LoginFormInputNamesTypeKeys>('Type symbols shown on image', 'captcha', [requiredField], Input)}
                     </div>
                 }
             </div>
