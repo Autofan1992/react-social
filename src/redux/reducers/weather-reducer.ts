@@ -1,4 +1,4 @@
-import { weatherAPI } from '../../api/api'
+import { weatherAPI, WeatherResultCodes } from '../../api/api'
 import { stopSubmit } from 'redux-form'
 import { ThunkAction } from 'redux-thunk'
 import { WeatherDataType } from '../../types/types'
@@ -55,13 +55,13 @@ type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>
 export const getWeatherData = (cityName: string): ThunkType => async dispatch => {
     dispatch(toggleFetching(true))
 
-    const response = await weatherAPI.getWeatherData(cityName)
+    const data = await weatherAPI.getWeatherData(cityName)
 
     try {
-        if (response.data.cod === 200) {
-            dispatch(setWeatherData(response.data))
+        if (data.cod === WeatherResultCodes.Success) {
+            dispatch(setWeatherData(data))
         } else {
-            dispatch(stopSubmit('weatherForm', { city: response.data.message }))
+            dispatch(stopSubmit('weatherForm', { city: data.message }))
         }
     } catch (e) {
         window.alert(e)

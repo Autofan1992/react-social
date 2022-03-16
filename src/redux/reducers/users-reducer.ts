@@ -124,9 +124,9 @@ type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
 export const requestUsers = (pageNumber: number, pageSize: number): ThunkType => async dispatch => {
     dispatch(toggleIsFetching(true))
 
-    const response = await userAPI.getUsers(pageNumber, pageSize)
-    dispatch(setUsers(response.data.items))
-    dispatch(setTotalUsersCount(response.data.totalCount))
+    const data = await userAPI.getUsers(pageNumber, pageSize)
+    dispatch(setUsers(data.items))
+    dispatch(setTotalUsersCount(data.totalCount))
     dispatch(setCurrentPage(pageNumber))
     dispatch(toggleIsFetching(false))
 }
@@ -135,8 +135,8 @@ export const followUserToggle = (userId: number, followed: boolean): ThunkType =
     const followFn = !followed ? userAPI.followUserRequest : userAPI.unfollowUserRequest
     dispatch(toggleFollowingProgress(true, userId))
 
-    const response = await followFn(userId)
-    if (response.data.resultCode === 0) {
+    const data = await followFn(userId)
+    if (data.resultCode === 0) {
         dispatch(setToggleFollow(userId))
         dispatch(toggleFollowingProgress(false, userId))
     }

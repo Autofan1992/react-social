@@ -1,6 +1,6 @@
 import { profileAPI } from '../../api/api'
 import { FormAction, reset, stopSubmit } from 'redux-form'
-import { PhotosType, PostType, ProfileType } from '../../types/types'
+import { PostType, ProfileType } from '../../types/types'
 import { ThunkAction } from 'redux-thunk'
 import { AppStateType } from '../redux-store'
 
@@ -159,8 +159,8 @@ const setUserProfile = (profile: ProfileType): SetUserProfileActionType => ({
 })
 
 export const getUserProfile = (userId: number): ThunkType => async dispatch => {
-    const response = await profileAPI.getProfile(userId)
-    dispatch(setUserProfile(response.data))
+    const data = await profileAPI.getProfile(userId)
+    dispatch(setUserProfile(data))
 }
 
 type SetStatusSuccessActionType = {
@@ -174,8 +174,8 @@ const setStatusSuccess = (status: string): SetStatusSuccessActionType => ({
 })
 
 export const getUserStatus = (userId: number): ThunkType => async dispatch => {
-    const response = await profileAPI.getStatus(userId)
-    dispatch(setStatusSuccess(response.data))
+    const data = await profileAPI.getStatus(userId)
+    dispatch(setStatusSuccess(data))
 }
 
 type SetChangeStatusResponseActionType = {
@@ -190,8 +190,8 @@ const setChangeStatusResponse = (result: boolean | undefined): SetChangeStatusRe
 
 export const updateUserStatus = (status: string): ThunkType => async dispatch => {
     try {
-        const response = await profileAPI.setStatus(status)
-        if (response.data.resultCode === 0) {
+        const data = await profileAPI.setStatus(status)
+        if (data.resultCode === 0) {
             dispatch(setChangeStatusResponse(true))
             dispatch(setStatusSuccess(status))
         } else {
@@ -236,13 +236,13 @@ const setSaveProfileResult = (result: boolean): SetSaveProfileResultActionType =
     payload: result
 })
 
-export const updateUserAvatar = (avatar: PhotosType): ThunkType => async dispatch => {
+export const updateUserAvatar = (avatar: File): ThunkType => async dispatch => {
     dispatch(setIsFetchingAvatar(true))
     try {
-        const response = await profileAPI.setAvatar(avatar)
-        if (response.data.resultCode === 0) {
+        const data = await profileAPI.setAvatar(avatar)
+        if (data.resultCode === 0) {
             dispatch(setChangeAvatarResponse(true))
-            dispatch(setAvatarSuccess(response.data.data.photos))
+            dispatch(setAvatarSuccess(data.data.photos))
         }
     } catch (e) {
         dispatch(setChangeAvatarResponse(false))
@@ -256,18 +256,18 @@ export const updateUserAvatar = (avatar: PhotosType): ThunkType => async dispatc
 }
 
 export const saveProfile = (profileData: ProfileType): ThunkType => async dispatch => {
-    const response = await profileAPI.saveProfile(profileData)
+    const data = await profileAPI.saveProfile(profileData)
 
-    if (response.data.resultCode === 0) {
+    if (data.resultCode === 0) {
         dispatch(setUserProfile(profileData))
         dispatch(setSaveProfileResult(true))
     } else {
-        const contactTitle = response.data.messages[0].split(/[( -> )]/)
+        const contactTitle = data.messages[0].split(/[( -> )]/)
         const splitTitle = contactTitle[contactTitle.length - 2].toLowerCase()
 
         const errorObject = {
             'contacts': {
-                [splitTitle]: response.data.messages[0]
+                [splitTitle]: data.messages[0]
             }
         }
 

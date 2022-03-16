@@ -127,8 +127,8 @@ export const login = ({ email, password, rememberMe, captcha }: ProfileType): Th
 }
 
 export const logout = (): ThunkAction<void, InitialStateType, unknown, AnyAction> => async dispatch => {
-    let response = await authAPI.sendLogoutRequest()
-    if (response.data.resultCode === ResultCodesEnum.Success) {
+    let data = await authAPI.sendLogoutRequest()
+    if (data.resultCode === ResultCodesEnum.Success) {
         dispatch(setAuthUserData(false, null, null, null, null))
     }
 }
