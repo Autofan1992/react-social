@@ -37,20 +37,20 @@ const ProfileStatus: FC<PropsType> = ({ status, statusChangeResult, updateUserSt
                 <div>
                     {!statusChangeResult
                         ? <div className="alert alert-danger" role="alert">
-                            Что-то пошло не так!
+                            Something went wrong
                         </div>
                         : <div className="alert alert-success" role="alert">
-                            Статус успешно изменён!
+                            Status successfully changed
                         </div>}
                 </div>}
 
-            <div className="d-flex align-items-center mb-2">
-                <p className="fw-bold mb-0">Статус:&nbsp;</p>
+            <div style={{ display: 'flex' }}>
+                <p>Status:&nbsp;</p>
                 <div className={styles.statusBlock}>
                     <p className="mb-0">{status}</p>
                 </div>
                 {isOwner &&
-                    <button className="btn-sm ms-3" onClick={handleEditMode}>изменить</button>}
+                    <button className="btn-sm" style={{marginLeft: '.5rem'}} onClick={handleEditMode}>Change</button>}
             </div>
             {editMode &&
                 <div className={styles.forInput}>

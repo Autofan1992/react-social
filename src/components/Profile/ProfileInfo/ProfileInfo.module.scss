@@ -27,6 +27,7 @@
   .avatar {
     display: inline-block;
     position: relative;
+    max-width: 150px;
 
     label {
       position: absolute;
@@ -34,12 +35,12 @@
       left: 15px;
     }
 
-    input {
+    /*input {
       appearance: none;
       opacity: 0;
       visibility: hidden;
       width: 0;
       height: 0;
-    }
+    }*/
   }
 }

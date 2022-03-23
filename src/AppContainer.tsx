@@ -33,7 +33,7 @@ const AppContainer: FC<PropsFromRedux> = ({ initialized, initializeApp, isAuth }
         return function cleanup() {
             window.removeEventListener('unhandledrejection', handleAllUnhandledErrors)
         }
-    }, [initializeApp, initialized])
+    }, [initializeApp])
 
     if (!initialized) {
         return <Preloader/>

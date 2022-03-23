@@ -16,7 +16,7 @@ const User: FC<PropsType> = ({ user, toggleFollowing, followingInProgress }) => 
             <div className={styles.userLeft}>
                 <div>
                     <NavLink to={'/profile/' + user.id} className={styles.profileAvatar}>
-                        <img src={user.photos.small ? user.photos.small : userPhoto} alt=""/>
+                        <img src={user.photos.small ??  userPhoto} alt=""/>
                     </NavLink>
                 </div>
                 <div>

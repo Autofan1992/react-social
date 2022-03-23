@@ -29,7 +29,6 @@ type InitializingSuccessType = {
 
 const setInitializingSuccess = (): InitializingSuccessType => ({ type: SET_INITIALIZED })
 
-
 export const initializeApp = (): ThunkAction<Promise<void>, InitialStateType, unknown, ActionTypes> => async dispatch => {
     await getAuthUserData()
     dispatch(setInitializingSuccess())

@@ -1,7 +1,7 @@
 import styles from './ProfileInfo.module.scss'
-import thumbnail from '../../../images/profile-thumbnail-big.jpg'
 import Preloader from '../../common/preloader/Preloader'
 import { ChangeEvent, FC } from 'react'
+import userPhoto from '../../../images/user.svg'
 
 type PropsType = {
     isOwner: boolean
@@ -20,7 +20,7 @@ const ProfileAvatar: FC<PropsType> = ({ isOwner, avatar, savePhoto, isFetchingAv
     return (
         <div className={styles.avatar}>
             {isFetchingAvatar && <Preloader/>}
-            <img src={avatar ?? thumbnail} alt="avatar"/>
+            <img src={avatar ?? userPhoto} alt="avatar"/>
             {isOwner &&
                 <label className="text-white">
                     <input type={'file'} onChange={handleAvatarChange}/>

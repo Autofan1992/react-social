@@ -1,8 +1,8 @@
 import styles from './MyPosts.module.scss'
 import Post from './Post/Post'
-import { Field, InjectedFormProps, reduxForm } from 'redux-form'
+import { InjectedFormProps, reduxForm } from 'redux-form'
 import { maxLength, minLength, requiredField } from '../../../redux/utilities/validators/validators'
-import { Textarea } from '../../common/FormControls/FormControls'
+import { createField, Textarea } from '../../common/FormControls/FormControls'
 import { PostType } from '../../../types/types'
 import { FC } from 'react'
 
@@ -45,12 +45,7 @@ function PostForm({ handleSubmit }: InjectedFormProps<PostType>) {
     return (
         <form onSubmit={handleSubmit}>
             <div className="input-block">
-                <Field
-                    placeholder="Начинайте писать пост"
-                    name={'post'}
-                    component={Textarea}
-                    validate={[requiredField, maxLength10, minLength2]}
-                />
+                {createField('Start typing something...', 'post', [requiredField, maxLength10, minLength2], Textarea)}
             </div>
             <button className="btn btn-primary mt-3">Add Post</button>
         </form>

@@ -53,7 +53,7 @@ export const createField = <KeysType extends string>(
     text = '') => (
 
     <div>
-        <Field name={name} validate={validators} component={component} {...props} />
+        <Field placeholder={placeholder} name={name} validate={validators} component={component} {...props} />
         {text}
     </div>
 )

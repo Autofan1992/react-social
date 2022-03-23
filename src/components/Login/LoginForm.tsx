@@ -8,21 +8,21 @@ type PropsType = {
     captcha: string | null
 }
 
-type LoginFormInputNamesTypeKeys = keyof ProfileType
+type LoginFormInputNamesKeys = Extract<keyof ProfileType, string>
 
 const LoginForm: FC<InjectedFormProps<ProfileType, PropsType> & PropsType> = ({ handleSubmit, error, captcha }) => {
     return (
         <form onSubmit={handleSubmit}>
             <div className="inputBlocks my-3">
                 <div className="input-block">
-                    {createField<LoginFormInputNamesTypeKeys>('Email', 'email', [requiredField], Input, {type: 'email'})}
+                    {createField<LoginFormInputNamesKeys>('Email', 'email', [requiredField], Input, { type: 'email' })}
                 </div>
                 <div className="input-block my-3">
-                    {createField<LoginFormInputNamesTypeKeys>('Password', 'password', [requiredField], Input, {type: 'password'})}
+                    {createField<LoginFormInputNamesKeys>('Password', 'password', [requiredField], Input, { type: 'password' })}
                 </div>
                 <div className="input-block form-check">
                     <label className="form-check-label">
-                        {createField<LoginFormInputNamesTypeKeys>(undefined, 'rememberMe', [], Input, {type: 'checkbox'})}
+                        {createField<LoginFormInputNamesKeys>(undefined, 'rememberMe', [], Input, { type: 'checkbox' })}
                         <p className="mb-0">Запомнить меня</p>
                     </label>
                 </div>
@@ -34,7 +34,7 @@ const LoginForm: FC<InjectedFormProps<ProfileType, PropsType> & PropsType> = ({ 
                 {captcha &&
                     <div className="input-block">
                         <div className="my-3"><img src={captcha} alt=""/></div>
-                        {createField<LoginFormInputNamesTypeKeys>('Type symbols shown on image', 'captcha', [requiredField], Input)}
+                        {createField<LoginFormInputNamesKeys>('Type symbols shown on image', 'captcha', [requiredField], Input)}
                     </div>
                 }
             </div>

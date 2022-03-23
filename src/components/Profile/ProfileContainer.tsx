@@ -41,14 +41,13 @@ type OwnProps = {
     isAuth: boolean
 }
 
-const ProfileContainer: FC<PropsFromRedux & RouteComponentProps<TParams> & OwnProps> = (
-    {
+const ProfileContainer: FC<PropsFromRedux & RouteComponentProps<TParams> & OwnProps> = (props) => {
+    const {
         getUserProfile,
         getUserStatus,
         authorisedUserId,
         isAuth
-    }, props
-) => {
+    } = props
 
     const urlUserId = props.match.params.userId?.length ? +props.match.params.userId : undefined
 

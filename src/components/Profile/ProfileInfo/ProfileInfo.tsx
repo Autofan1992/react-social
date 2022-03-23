@@ -42,7 +42,7 @@ const ProfileInfo: FC<PropsType> = (
                 <div className={styles.authorInfo}>
                     {isOwner &&
                         <div className="text-end">
-                            <button onClick={setEditMode} className="btn btn-link">Изменить профиль</button>
+                            <button onClick={setEditMode} className="btn btn-link">Edit profile</button>
                         </div>
                     }
                     <div className={styles.topInfo}>
@@ -59,25 +59,25 @@ const ProfileInfo: FC<PropsType> = (
                                 updateUserStatus={updateUserStatus}
                             />
                             <p>
-                                <span className="fw-bold">Полное Имя:</span> {profile.fullName}
+                                <span className="fw-bold">Full name:</span> {profile.fullName}
                             </p>
                             <p>
                             <span
-                                className="fw-bold">В поисках работы:</span> {profile.lookingForAJob ? 'Да' : 'Нет'}
+                                className="fw-bold">Looking for a job:</span> {profile.lookingForAJob ? 'Yes' : 'No'}
                             </p>
                             {profile.lookingForAJob &&
                                 <p>
                             <span
-                                className="fw-bold">Мои навыки:</span> {profile.lookingForAJobDescription}
+                                className="fw-bold">My skills:</span> {profile.lookingForAJobDescription}
                                 </p>}
                         </div>
                     </div>
                     <div className={styles.about}>
-                        <p><b>Обо мне</b></p>
+                        <p><b>About me</b></p>
                         <p>{profile.aboutMe}</p>
                     </div>
                     <div className={styles.contacts}>
-                        <p><b>Я в соцсетях:</b></p>
+                        <p><b>My socials:</b></p>
                         {Object.entries(profile.contacts).map(([title, url]) => (
                             url &&
                             <a target="_blank" rel="noreferrer" className={title} key={url} href={url}>{title}</a>

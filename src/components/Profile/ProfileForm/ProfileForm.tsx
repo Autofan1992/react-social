@@ -1,6 +1,6 @@
 import styles from './ProfileForm.module.scss'
 import profileThumbnailBig from '../../../images/profile-thumbnail-big.jpg'
-import { CheckBox, Input, Textarea } from '../../common/FormControls/FormControls'
+import { CheckBox, createField, Input, Textarea } from '../../common/FormControls/FormControls'
 import { requiredField } from '../../../redux/utilities/validators/validators'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { ProfileType } from '../../../types/types'
@@ -10,6 +10,8 @@ type PropsType = {
     profile: ProfileType
     error: string
 }
+
+type ProfileFormInputNamesKeys = keyof ProfileType
 
 const ProfileForm: FC<InjectedFormProps<ProfileType, PropsType> & PropsType> = ({ profile, handleSubmit, error }) => {
     return (
@@ -23,48 +25,32 @@ const ProfileForm: FC<InjectedFormProps<ProfileType, PropsType> & PropsType> = (
                         <div className={styles.infoBlock}>
                             <div className={styles.fieldBlock}>
                                 <p>
-                                    <span className="fw-bold">Полное Имя:</span>
+                                    <span className="fw-bold">Full name</span>
                                 </p>
-                                <Field
-                                    name={'fullName'}
-                                    component={Input}
-                                    validate={[requiredField]}
-                                    value={profile.fullName}
-                                />
+                                {createField<ProfileFormInputNamesKeys>('Type your full name', 'fullName', [requiredField], Input, profile.fullName)}
                             </div>
                             <div className={styles.fieldBlock}>
-                                <p><b>Обо мне</b></p>
-                                <Field
-                                    name={'aboutMe'}
-                                    component={Textarea}
-                                    value={profile.aboutMe}
-                                />
+                                <p><b>About me</b></p>
+                                {createField('Write about yourself', 'aboutMe', [], Textarea, profile.aboutMe)}
                             </div>
                         </div>
                         <div className={styles.infoBlock}>
-                            <div className={`${styles.fieldBlock} d-flex`}>
-                                <p className="me-2">
-                                    <span className="fw-bold">В поисках работы:</span>
+                            <div className={styles.fieldBlock} style={{ display: 'flex' }}>
+                                <p style={{ marginRight: '.5rem' }}>
+                                    <span className="fw-bold">Looking for a job</span>
                                 </p>
-                                <Field
-                                    name={'lookingForAJob'}
-                                    component={CheckBox}
-                                />
+                                {createField('', 'lookingForAJob', [], CheckBox, { type: 'checkbox' })}
                             </div>
                             <div className={styles.fieldBlock}>
                                 <p>
-                                    <span className="fw-bold">Мои навыки:</span>
+                                    <span className="fw-bold">My skills</span>
                                 </p>
-                                <Field
-                                    name={'lookingForAJobDescription'}
-                                    component={Textarea}
-                                    value={profile.lookingForAJobDescription}
-                                />
+                                {createField('Type your skills', 'lookingForAJobDescription', [], Textarea, profile.lookingForAJobDescription)}
                             </div>
                         </div>
                     </div>
                     <div className={styles.contacts}>
-                        <p><b>Я в соцсетях:</b></p>
+                        <p><b>My socials</b></p>
                         <div className="row">
                             {Object.entries(profile.contacts).map(([title]) => (
                                 <div className="col-auto mb-2" key={title}>
@@ -79,7 +65,7 @@ const ProfileForm: FC<InjectedFormProps<ProfileType, PropsType> & PropsType> = (
                         </div>
                     </div>
                     {error && <p className="red">{error}</p>}
-                    <button className="btn btn-secondary">Сохранить</button>
+                    <button className="btn btn-secondary">Save profile</button>
                 </div>
             </div>
         </form>
