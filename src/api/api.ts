@@ -14,27 +14,23 @@ export enum ResultCodesEnum {
     Error = 1
 }
 
-type UserInfoResponse = {
-    items: Array<UserType>
+type UserResponseType<I = void> = {
+    resultCode: ResultCodesEnum
+    items: I
+    messages: Array<string>
     totalCount: number
     error: string
 }
 
-type UserFollowResponseType = {
-    resultCode: ResultCodesEnum
-    messages: Array<string>
-    data: any
-}
-
 export const userAPI = {
     getUsers(currentPage: number, pageSize: number) {
-        return instance.get<UserInfoResponse>(`users?page=${currentPage}&count=${pageSize}`).then(res => res.data)
+        return instance.get<UserResponseType<Array<UserType>>>(`users?page=${currentPage}&count=${pageSize}`).then(res => res.data)
     },
     unfollowUserRequest(userId: number) {
-        return instance.delete<UserFollowResponseType>(`follow/${userId}`).then(res => res.data)
+        return instance.delete<UserResponseType>(`follow/${userId}`).then(res => res.data)
     },
     followUserRequest(userId: number) {
-        return instance.post<UserFollowResponseType>(`follow/${userId}`).then(res => res.data)
+        return instance.post<UserResponseType>(`follow/${userId}`).then(res => res.data)
     }
 }
 
@@ -42,25 +38,21 @@ export enum CaptchaResultCode {
     CaptchaIsRequired = 10
 }
 
-type AuthInfoResponse = {
-    data: {
-        id: number
-        email: string
-        login: string
-    }
-    resultCode: ResultCodesEnum
-    messages: Array<string>
+type AuthInfoDataType = {
+    id: number
+    email: string
+    login: string
 }
 
-type AuthResponse = {
-    data: {
-        userId: number
-    }
+type LoginResponseType<D = void> = {
+    data: D
     resultCode: ResultCodesEnum | CaptchaResultCode
     messages: Array<string>
 }
 
-type AuthProfileResponse = ProfileType
+type AuthDataType = {
+    userId: number
+}
 
 type CaptchaResponse = {
     url: string
@@ -68,13 +60,13 @@ type CaptchaResponse = {
 
 export const authAPI = {
     getAuthInfo() {
-        return instance.get<AuthInfoResponse>(`auth/me`).then(res => res.data)
+        return instance.get<LoginResponseType<AuthInfoDataType>>(`auth/me`).then(res => res.data)
     },
     getAuthProfile(id: number) {
-        return instance.get<AuthProfileResponse>(`profile/${id}`).then(res => res.data)
+        return instance.get<ProfileType>(`profile/${id}`).then(res => res.data)
     },
-    sendLoginRequest(email: string, password: string, rememberMe: boolean, captcha: string) {
-        return instance.post<AuthResponse>(`auth/login`, {
+    loginRequest(email: string, password: string, rememberMe: boolean, captcha: string) {
+        return instance.post<LoginResponseType<AuthDataType>>(`auth/login`, {
             email,
             password,
             rememberMe,
@@ -84,8 +76,8 @@ export const authAPI = {
     getCaptchaURL() {
         return instance.get<CaptchaResponse>(`security/get-captcha-url`).then(res => res.data)
     },
-    sendLogoutRequest() {
-        return instance.delete<AuthResponse>(`auth/login`).then(res => res.data)
+    logoutRequest() {
+        return instance.delete<LoginResponseType>(`auth/login`).then(res => res.data)
     }
 }
 

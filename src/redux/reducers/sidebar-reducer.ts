@@ -1,10 +1,8 @@
-type FriendsType = {
-    name: string
-}
+import { FriendsType } from '../../types/types'
 
 const initialState = {
     friends: [
-        { name: 'Dimych' },
+        { name: 'Dima' },
         { name: 'Jeremy' }
     ] as Array<FriendsType>
 }

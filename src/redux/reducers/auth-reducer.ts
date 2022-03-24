@@ -1,13 +1,8 @@
 import { authAPI, CaptchaResultCode, ResultCodesEnum } from '../../api/api'
 import { stopSubmit } from 'redux-form'
 import { ThunkAction } from 'redux-thunk'
-import { AnyAction } from 'redux'
 import { ProfileType } from '../../types/types'
-import { AppStateType } from '../redux-store'
-
-const SET_USER_DATA = 'AUTH/SET_USER_DATA'
-const SET_CAPTCHA = 'AUTH/SET_CAPTCHA'
-const SET_IS_FETCHING = 'AUTH/SET_IS_FETCHING'
+import { AppStateType, InferActionTypes } from '../redux-store'
 
 const initialState = {
     userId: null as number | null,
@@ -20,21 +15,23 @@ const initialState = {
     isFetching: false
 }
 
-export type InitialStateType = typeof initialState
+type InitialStateType = typeof initialState
+type ActionTypes = InferActionTypes<typeof actions>
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
 
 const authReducer = (state = initialState, action: ActionTypes): InitialStateType => {
     switch (action.type) {
-        case SET_USER_DATA:
+        case 'AUTH/SET_USER_DATA':
             return {
                 ...state,
                 ...action.payload
             }
-        case SET_IS_FETCHING:
+        case 'AUTH/SET_IS_FETCHING':
             return {
                 ...state,
                 isFetching: action.payload
             }
-        case SET_CAPTCHA:
+        case 'AUTH/SET_CAPTCHA':
             return {
                 ...state,
                 captchaUrl: action.payload
@@ -44,68 +41,39 @@ const authReducer = (state = initialState, action: ActionTypes): InitialStateTyp
     }
 }
 
-type ActionTypes =
-    SetAuthUserDataActionType |
-    IsFetchingActionType |
-    SetCaptcha
-
-type SetAuthUserDataActionPayloadType = {
-    userId: number | null
-    email: string | null
-    login: string | null
-    userPhoto: string | null
-    isAuth: boolean
+const actions = {
+    setAuthUserData: (isAuth: boolean, userId: number | null, email: string | null, login: string | null, userPhoto: string | null) => ({
+        type: 'AUTH/SET_USER_DATA',
+        payload: { userId, email, login, userPhoto, isAuth }
+    } as const),
+    setIsFetching: (payload: boolean) => ({
+        type: 'AUTH/SET_IS_FETCHING',
+        payload
+    } as const),
+    setCaptcha: (url: string) => ({
+        type: 'AUTH/SET_CAPTCHA',
+        payload: url
+    } as const)
 }
-
-type SetAuthUserDataActionType = {
-    type: typeof SET_USER_DATA
-    payload: SetAuthUserDataActionPayloadType
-}
-
-const setAuthUserData = (isAuth: boolean, userId: number | null, email: string | null, login: string | null, userPhoto: string | null): SetAuthUserDataActionType => ({
-    type: SET_USER_DATA,
-    payload: { userId, email, login, userPhoto, isAuth }
-})
-
-type IsFetchingActionType = {
-    type: typeof SET_IS_FETCHING
-    payload: boolean
-}
-
-const setIsFetching = (payload: boolean): IsFetchingActionType => ({
-    type: SET_IS_FETCHING,
-    payload
-})
-
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
 
 export const getAuthUserData = (): ThunkType => async dispatch => {
     const userData = await authAPI.getAuthInfo()
     if (userData.resultCode === ResultCodesEnum.Success) {
         const { id, email, login } = userData.data
         const authData = await authAPI.getAuthProfile(id)
-        dispatch(setAuthUserData(true, id, email, login, authData.photos.small))
+        dispatch(actions.setAuthUserData(true, id, email, login, authData.photos.small))
     }
 }
 
-type SetCaptcha = {
-    type: typeof SET_CAPTCHA
-    payload: string
-}
-const setCaptcha = (url: string): SetCaptcha => ({
-    type: SET_CAPTCHA,
-    payload: url
-})
-
 export const login = ({ email, password, rememberMe, captcha }: ProfileType): ThunkType => async dispatch => {
     try {
-        dispatch(setIsFetching(true))
-        let loginData = await authAPI.sendLoginRequest(email, password, rememberMe, captcha)
+        dispatch(actions.setIsFetching(true))
+        let loginData = await authAPI.loginRequest(email, password, rememberMe, captcha)
 
         if (loginData.resultCode === ResultCodesEnum.Success) {
             // logged in, sending profile request
             await dispatch(getAuthUserData())
-            dispatch(setCaptcha(''))
+            dispatch(actions.setCaptcha(''))
 
         } else if (loginData.resultCode > ResultCodesEnum.Success && loginData.resultCode < CaptchaResultCode.CaptchaIsRequired) {
             // error in form fields
@@ -116,20 +84,20 @@ export const login = ({ email, password, rememberMe, captcha }: ProfileType): Th
             // many wrong requests, sending captcha request
             dispatch(stopSubmit('loginForm', { _error: 'Проверьте логин и/или пароль, а также введите символы изображенные на картинке в поле ниже' }))
             const captchaData = await authAPI.getCaptchaURL()
-            dispatch(setCaptcha(captchaData.url))
+            dispatch(actions.setCaptcha(captchaData.url))
         }
     } catch (e) {
         console.log(e)
         window.alert('Что-то пошло не так')
     } finally {
-        dispatch(setIsFetching(false))
+        dispatch(actions.setIsFetching(false))
     }
 }
 
-export const logout = (): ThunkAction<void, InitialStateType, unknown, AnyAction> => async dispatch => {
-    let data = await authAPI.sendLogoutRequest()
+export const logout = (): ThunkType => async dispatch => {
+    let data = await authAPI.logoutRequest()
     if (data.resultCode === ResultCodesEnum.Success) {
-        dispatch(setAuthUserData(false, null, null, null, null))
+        dispatch(actions.setAuthUserData(false, null, null, null, null))
     }
 }
 

@@ -2,16 +2,9 @@ import { BudgetType, CurrentBudgetType, ExpenseType } from '../../types/types'
 import { v4 as uuidV4 } from 'uuid'
 import { FormAction, reset } from 'redux-form'
 import { ThunkAction } from 'redux-thunk'
-import { AppStateType } from '../redux-store'
+import { AppStateType, InferActionTypes } from '../redux-store'
 
 export const UNCATEGORIZED_BUDGET_ID = 'uncategorized'
-const ADD_BUDGET = 'BUDGET/ADD_BUDGET'
-const SET_CURRENT_BUDGET = 'BUDGET/SET_CURRENT_BUDGET'
-const ADD_BUDGETS_ARRAY = 'BUDGET/ADD_BUDGETS_ARRAY'
-const ADD_EXPENSES_ARRAY = 'BUDGET/ADD_EXPENSES_ARRAY'
-const DELETE_BUDGET = 'BUDGET/DELETE_BUDGET'
-const ADD_EXPENSE = 'BUDGET/ADD_EXPENSE'
-const DELETE_EXPENSE = 'BUDGET/DELETE_EXPENSE'
 
 const initialState = {
     currentBudget: {
@@ -21,11 +14,13 @@ const initialState = {
     expenses: [] as Array<ExpenseType>
 }
 
-export type initialStateType = typeof initialState
+type initialStateType = typeof initialState
+type ActionTypes = InferActionTypes<typeof actions>
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes | FormAction>
 
 const budgetsReducer = (state = initialState, action: ActionTypes): initialStateType => {
     switch (action.type) {
-        case SET_CURRENT_BUDGET:
+        case 'BUDGET/SET_CURRENT_BUDGET':
             return {
                 ...state,
                 currentBudget: {
@@ -33,7 +28,7 @@ const budgetsReducer = (state = initialState, action: ActionTypes): initialState
                     name: action.payload.name
                 }
             }
-        case ADD_BUDGET:
+        case 'BUDGET/ADD_BUDGET':
             if (state.budgets.find(budget => budget.name === action.payload.name)) {
                 return state
             }
@@ -48,7 +43,7 @@ const budgetsReducer = (state = initialState, action: ActionTypes): initialState
                     }
                 ]
             }
-        case ADD_BUDGETS_ARRAY:
+        case 'BUDGET/ADD_BUDGETS_ARRAY':
             return {
                 ...state,
                 budgets: [
@@ -56,7 +51,7 @@ const budgetsReducer = (state = initialState, action: ActionTypes): initialState
                     ...action.payload
                 ]
             }
-        case ADD_EXPENSES_ARRAY:
+        case 'BUDGET/ADD_EXPENSES_ARRAY':
             return {
                 ...state,
                 expenses: [
@@ -64,12 +59,12 @@ const budgetsReducer = (state = initialState, action: ActionTypes): initialState
                     ...action.payload
                 ]
             }
-        case DELETE_BUDGET:
+        case 'BUDGET/DELETE_BUDGET':
             return {
                 ...state,
                 budgets: state.budgets.filter(budget => budget.id !== action.payload.id)
             }
-        case ADD_EXPENSE:
+        case 'BUDGET/ADD_EXPENSE':
             return {
                 ...state,
                 expenses: [
@@ -82,7 +77,7 @@ const budgetsReducer = (state = initialState, action: ActionTypes): initialState
                     }
                 ]
             }
-        case DELETE_EXPENSE:
+        case 'BUDGET/DELETE_EXPENSE':
             return {
                 ...state,
                 expenses: state.expenses.filter(expense => {
@@ -96,106 +91,56 @@ const budgetsReducer = (state = initialState, action: ActionTypes): initialState
     }
 }
 
-type ActionTypes =
-    AddCurrentBudgetActionType
-    | AddBudgetActionType
-    | AddBudgetsArrayActionType
-    | AddExpensesArrayActionType
-    | DeleteBudgetActionType
-    | AddExpenseActionType
-    | DeleteExpenseActionType
-
-type AddCurrentBudgetActionType = {
-    type: typeof SET_CURRENT_BUDGET
-    payload: {
-        id: string
-        name: string
-    }
+export const actions = {
+    setCurrentBudget: (id: string, name: string) => ({
+        type: 'BUDGET/SET_CURRENT_BUDGET',
+        payload: {
+            id,
+            name
+        }
+    } as const),
+    addBudget: (name: string, max: number) => ({
+        type: 'BUDGET/ADD_BUDGET',
+        payload: {
+            name,
+            max
+        }
+    } as const),
+    addBudgetsArray: (budgets: Array<BudgetType>) => ({
+        type: 'BUDGET/ADD_BUDGETS_ARRAY',
+        payload: budgets
+    } as const),
+    addExpensesArray: (expenses: Array<ExpenseType>) => ({
+        type: 'BUDGET/ADD_EXPENSES_ARRAY',
+        payload: expenses
+    } as const),
+    deleteBudget: (id: string) => ({
+        type: 'BUDGET/DELETE_BUDGET',
+        payload: {
+            id
+        }
+    } as const),
+    addExpense: (description: string, amount: number, budgetId: string) => ({
+        type: 'BUDGET/ADD_EXPENSE',
+        payload: {
+            description,
+            amount,
+            budgetId
+        }
+    } as const),
+    deleteExpense: (id: string) => ({
+        type: 'BUDGET/DELETE_EXPENSE',
+        payload: {
+            id
+        }
+    } as const)
 }
-
-export const setCurrentBudget = (id: string, name: string): AddCurrentBudgetActionType => ({
-    type: SET_CURRENT_BUDGET,
-    payload: {
-        id,
-        name
-    }
-})
-
-type AddBudgetActionType = {
-    type: typeof ADD_BUDGET
-    payload: {
-        name: string
-        max: number
-    }
-}
-
-const addBudgetAction = (name: string, max: number): AddBudgetActionType => ({
-    type: ADD_BUDGET,
-    payload: {
-        name,
-        max
-    }
-})
-
-type AddBudgetsArrayActionType = {
-    type: typeof ADD_BUDGETS_ARRAY
-    payload: Array<BudgetType>
-}
-
-const addBudgetsArrayAction = (budgets: Array<BudgetType>): AddBudgetsArrayActionType => ({
-    type: ADD_BUDGETS_ARRAY,
-    payload: budgets
-})
-
-type AddExpensesArrayActionType = {
-    type: typeof ADD_EXPENSES_ARRAY
-    payload: Array<ExpenseType>
-}
-
-const addExpensesArrayAction = (expenses: Array<ExpenseType>): AddExpensesArrayActionType => ({
-    type: ADD_EXPENSES_ARRAY,
-    payload: expenses
-})
-
-type DeleteBudgetActionType = {
-    type: typeof DELETE_BUDGET
-    payload: {
-        id: string
-    }
-}
-
-const deleteBudgetAction = (id: string): DeleteBudgetActionType => ({
-    type: DELETE_BUDGET,
-    payload: {
-        id
-    }
-})
-
-type AddExpenseActionType = {
-    type: typeof ADD_EXPENSE
-    payload: {
-        description: string
-        amount: number
-        budgetId: string
-    }
-}
-
-const addExpenseAction = (description: string, amount: number, budgetId: string): AddExpenseActionType => ({
-    type: ADD_EXPENSE,
-    payload: {
-        description,
-        amount,
-        budgetId
-    }
-})
-
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes | FormAction>
 
 export const requestBudgets = (): ThunkType => async dispatch => {
     const jsonValue = localStorage.getItem('budgets')
     if (jsonValue != null) {
         const data = JSON.parse(jsonValue)
-        dispatch(addBudgetsArrayAction(data))
+        dispatch(actions.addBudgetsArray(data))
     }
 }
 
@@ -203,46 +148,32 @@ export const requestExpenses = (): ThunkType => async dispatch => {
     const jsonValue = localStorage.getItem('expenses')
     if (jsonValue != null) {
         const data = JSON.parse(jsonValue)
-        dispatch(addExpensesArrayAction(data))
+        dispatch(actions.addExpensesArray(data))
     }
 }
 
 export const addExpense = (description: string, amount: number, budgetId = UNCATEGORIZED_BUDGET_ID): ThunkType => async (dispatch, getState) => {
-    dispatch(addExpenseAction(description, amount, budgetId))
+    dispatch(actions.addExpense(description, amount, budgetId))
     dispatch(reset('expensesForm'))
     const expenses = getState().budgetsPage.expenses
     localStorage.setItem('expenses', JSON.stringify(expenses))
 }
 
-type DeleteExpenseActionType = {
-    type: typeof DELETE_EXPENSE
-    payload: {
-        id: string
-    }
-}
-
-const deleteExpenseAction = (id: string): DeleteExpenseActionType => ({
-    type: DELETE_EXPENSE,
-    payload: {
-        id
-    }
-})
-
 export const deleteExpense = (id: string): ThunkType => async (dispatch, getState) => {
-    dispatch(deleteExpenseAction(id))
+    dispatch(actions.deleteExpense(id))
     const expenses = getState().budgetsPage.expenses
     localStorage.setItem('expenses', JSON.stringify(expenses))
 }
 
 export const deleteBudget = (id: string): ThunkType => async (dispatch, getState) => {
-    dispatch(deleteBudgetAction(id))
-    await dispatch(deleteExpenseAction(id))
+    dispatch(actions.deleteBudget(id))
+    dispatch(actions.deleteExpense(id))
     const budgets = getState().budgetsPage.budgets
     localStorage.setItem('budgets', JSON.stringify(budgets))
 }
 
 export const addBudget = (name: string, max: number): ThunkType => async (dispatch, getState) => {
-    dispatch(addBudgetAction(name, max))
+    dispatch(actions.addBudget(name, max))
     dispatch(reset('budgetForm'))
     const budgets = getState().budgetsPage.budgets
     localStorage.setItem('budgets', JSON.stringify(budgets))

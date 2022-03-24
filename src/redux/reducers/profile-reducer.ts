@@ -2,18 +2,7 @@ import { profileAPI } from '../../api/api'
 import { FormAction, reset, stopSubmit } from 'redux-form'
 import { PostType, ProfileType } from '../../types/types'
 import { ThunkAction } from 'redux-thunk'
-import { AppStateType } from '../redux-store'
-
-const ADD_POST = 'PROFILE/ADD_POST'
-const DELETE_POST = 'PROFILE/DELETE_POST'
-const LIKE_POST = 'PROFILE/LIKE_POST'
-const SET_USER_PROFILE = 'PROFILE/SET_USER_PROFILE'
-const SET_USER_STATUS = 'PROFILE/SET_USER_STATUS'
-const SET_CHANGE_STATUS_RESULT_CODE = 'PROFILE/SET_CHANGE_STATUS_RESULT_CODE'
-const SET_PHOTO_SUCCESS = 'PROFILE/SET_PHOTO_SUCCESS'
-const SET_AVATAR_RESULT_CODE = 'PROFILE/SET_AVATAR_RESULT_CODE'
-const SET_IS_FETCHING_AVATAR = 'PROFILE/IS_FETCHING'
-const SET_SAVE_PROFILE_RESULT = 'PROFILE/SET_SAVE_PROFILE_RESULT'
+import { AppStateType, InferActionTypes } from '../redux-store'
 
 const initialState = {
     posts: [] as Array<PostType>,
@@ -25,17 +14,19 @@ const initialState = {
     saveProfileResult: false as boolean
 }
 
-export type InitialStateType = typeof initialState
+type InitialStateType = typeof initialState
+type ActionTypes = InferActionTypes<typeof actions>
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes | FormAction>
 
 const profileReducer = (state = initialState, action: ActionTypes): InitialStateType => {
     switch (action.type) {
-        case SET_IS_FETCHING_AVATAR: {
+        case 'PROFILE/SET_IS_FETCHING_AVATAR': {
             return {
                 ...state,
                 isFetchingAvatar: action.payload
             }
         }
-        case ADD_POST:
+        case 'PROFILE/ADD_POST':
             return {
                 ...state,
                 posts: [...state.posts, {
@@ -44,13 +35,13 @@ const profileReducer = (state = initialState, action: ActionTypes): InitialState
                     likesCount: 0
                 }]
             }
-        case DELETE_POST: {
+        case 'PROFILE/DELETE_POST': {
             return {
                 ...state,
                 posts: state.posts.filter(p => p.id !== action.payload)
             }
         }
-        case LIKE_POST:
+        case 'PROFILE/LIKE_POST':
             return {
                 ...state,
                 posts: state.posts.map(post => post.id === action.payload
@@ -59,27 +50,27 @@ const profileReducer = (state = initialState, action: ActionTypes): InitialState
                         likesCount: ++post.likesCount
                     } : post)
             }
-        case SET_USER_PROFILE:
+        case 'PROFILE/SET_USER_PROFILE':
             return {
                 ...state,
                 profile: action.payload
             }
-        case SET_USER_STATUS:
+        case 'PROFILE/SET_USER_STATUS':
             return {
                 ...state,
                 status: action.payload
             }
-        case SET_CHANGE_STATUS_RESULT_CODE:
+        case 'PROFILE/SET_CHANGE_STATUS_RESULT_CODE':
             return {
                 ...state,
                 statusChangeResult: action.payload
             }
-        case SET_PHOTO_SUCCESS:
+        case 'PROFILE/SET_PHOTO_SUCCESS':
             return {
                 ...state,
                 profile: { ...state.profile, photos: action.payload } as ProfileType
             }
-        case SET_SAVE_PROFILE_RESULT:
+        case 'PROFILE/SET_SAVE_PROFILE_RESULT':
             return {
                 ...state,
                 saveProfileResult: action.payload
@@ -89,168 +80,98 @@ const profileReducer = (state = initialState, action: ActionTypes): InitialState
     }
 }
 
-type ActionTypes =
-    SetNewPostActionType |
-    DeletePostActionType |
-    LikePostActionType |
-    IsFetchingAvatarActionType |
-    SetUserProfileActionType |
-    SetStatusSuccessActionType |
-    SetChangeStatusResponseActionType |
-    SetAvatarSuccessActionType |
-    SetChangeAvatarResponseActionType |
-    SetSaveProfileResultActionType
-
-type SetNewPostActionType = {
-    type: typeof ADD_POST
-    payload: string
+export const actions = {
+    setNewPost: (text: string) => ({
+        type: 'PROFILE/ADD_POST',
+        payload: text
+    } as const),
+    deletePost: (id: number) => ({
+        type: 'PROFILE/DELETE_POST',
+        payload: id
+    } as const),
+    likePost: (id: number) => ({
+        type: 'PROFILE/LIKE_POST',
+        payload: id
+    } as const),
+    setIsFetchingAvatar: (val: boolean) => ({
+        type: 'PROFILE/SET_IS_FETCHING_AVATAR',
+        payload: val
+    } as const),
+    setUserProfile: (profile: ProfileType) => ({
+        type: 'PROFILE/SET_USER_PROFILE',
+        payload: profile
+    } as const),
+    setStatusSuccess: (status: string) => ({
+        type: 'PROFILE/SET_USER_STATUS',
+        payload: status
+    } as const),
+    setChangeStatusResponse: (result: boolean | undefined) => ({
+        type: 'PROFILE/SET_CHANGE_STATUS_RESULT_CODE',
+        payload: result,
+    } as const),
+    setAvatarSuccess: (avatar: object) => ({
+        type: 'PROFILE/SET_PHOTO_SUCCESS',
+        payload: avatar
+    } as const),
+    setChangeAvatarResponse: (result: boolean | undefined) => ({
+        type: 'PROFILE/SET_AVATAR_RESULT_CODE',
+        payload: result,
+    } as const),
+    setSaveProfileResult: (result: boolean) => ({
+        type: 'PROFILE/SET_SAVE_PROFILE_RESULT',
+        payload: result
+    } as const)
 }
-
-export const setNewPost = (text: string): SetNewPostActionType => ({
-    type: ADD_POST,
-    payload: text
-})
-
-type DeletePostActionType = {
-    type: typeof DELETE_POST
-    payload: number
-}
-
-export const deletePost = (id: number): DeletePostActionType => ({
-    type: DELETE_POST,
-    payload: id
-})
-
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes | FormAction>
 
 export const addPost = (text: string): ThunkType => async dispatch => {
-    dispatch(setNewPost(text))
+    dispatch(actions.setNewPost(text))
     dispatch(reset('postForm'))
 }
 
-type LikePostActionType = {
-    type: typeof LIKE_POST
-    payload: number
-}
-
-export const likePost = (id: number): LikePostActionType => ({
-    type: LIKE_POST,
-    payload: id
-})
-
-type IsFetchingAvatarActionType = {
-    type: typeof SET_IS_FETCHING_AVATAR
-    payload: boolean
-}
-
-const setIsFetchingAvatar = (val: boolean): IsFetchingAvatarActionType => ({
-    type: SET_IS_FETCHING_AVATAR,
-    payload: val
-})
-
-type SetUserProfileActionType = {
-    type: typeof SET_USER_PROFILE
-    payload: ProfileType
-}
-
-const setUserProfile = (profile: ProfileType): SetUserProfileActionType => ({
-    type: SET_USER_PROFILE,
-    payload: profile
-})
-
 export const getUserProfile = (userId: number): ThunkType => async dispatch => {
     const data = await profileAPI.getProfile(userId)
-    dispatch(setUserProfile(data))
+    dispatch(actions.setUserProfile(data))
 }
-
-type SetStatusSuccessActionType = {
-    type: typeof SET_USER_STATUS
-    payload: string
-}
-
-const setStatusSuccess = (status: string): SetStatusSuccessActionType => ({
-    type: SET_USER_STATUS,
-    payload: status
-})
 
 export const getUserStatus = (userId: number): ThunkType => async dispatch => {
     const data = await profileAPI.getStatus(userId)
-    dispatch(setStatusSuccess(data))
+    dispatch(actions.setStatusSuccess(data))
 }
-
-type SetChangeStatusResponseActionType = {
-    type: typeof SET_CHANGE_STATUS_RESULT_CODE
-    payload: boolean | undefined
-}
-
-const setChangeStatusResponse = (result: boolean | undefined): SetChangeStatusResponseActionType => ({
-    type: SET_CHANGE_STATUS_RESULT_CODE,
-    payload: result,
-})
 
 export const updateUserStatus = (status: string): ThunkType => async dispatch => {
     try {
         const data = await profileAPI.setStatus(status)
         if (data.resultCode === 0) {
-            dispatch(setChangeStatusResponse(true))
-            dispatch(setStatusSuccess(status))
+            dispatch(actions.setChangeStatusResponse(true))
+            dispatch(actions.setStatusSuccess(status))
         } else {
-            dispatch(setChangeStatusResponse(false))
+            dispatch(actions.setChangeStatusResponse(false))
         }
     } catch (e) {
-        dispatch(setChangeStatusResponse(false))
+        dispatch(actions.setChangeStatusResponse(false))
         console.warn(e)
     } finally {
         setTimeout(function () {
-            dispatch(setChangeStatusResponse(undefined))
+            dispatch(actions.setChangeStatusResponse(undefined))
         }, 3000)
     }
 }
 
-type SetAvatarSuccessActionType = {
-    type: typeof SET_PHOTO_SUCCESS
-    payload: object
-}
-
-const setAvatarSuccess = (avatar: object): SetAvatarSuccessActionType => ({
-    type: SET_PHOTO_SUCCESS,
-    payload: avatar
-})
-
-type SetChangeAvatarResponseActionType = {
-    type: typeof SET_AVATAR_RESULT_CODE
-    payload: boolean | undefined
-}
-
-const setChangeAvatarResponse = (result: boolean | undefined): SetChangeAvatarResponseActionType => ({
-    type: SET_AVATAR_RESULT_CODE,
-    payload: result,
-})
-type SetSaveProfileResultActionType = {
-    type: typeof SET_SAVE_PROFILE_RESULT
-    payload: boolean
-}
-
-const setSaveProfileResult = (result: boolean): SetSaveProfileResultActionType => ({
-    type: SET_SAVE_PROFILE_RESULT,
-    payload: result
-})
-
 export const updateUserAvatar = (avatar: File): ThunkType => async dispatch => {
-    dispatch(setIsFetchingAvatar(true))
+    dispatch(actions.setIsFetchingAvatar(true))
     try {
         const data = await profileAPI.setAvatar(avatar)
         if (data.resultCode === 0) {
-            dispatch(setChangeAvatarResponse(true))
-            dispatch(setAvatarSuccess(data.data.photos))
+            dispatch(actions.setChangeAvatarResponse(true))
+            dispatch(actions.setAvatarSuccess(data.data.photos))
         }
     } catch (e) {
-        dispatch(setChangeAvatarResponse(false))
+        dispatch(actions.setChangeAvatarResponse(false))
         console.warn(e)
     } finally {
-        dispatch(setIsFetchingAvatar(false))
+        dispatch(actions.setIsFetchingAvatar(false))
         setTimeout(function () {
-            dispatch(setChangeAvatarResponse(undefined))
+            dispatch(actions.setChangeAvatarResponse(undefined))
         }, 3000)
     }
 }
@@ -259,18 +180,16 @@ export const saveProfile = (profileData: ProfileType): ThunkType => async dispat
     const data = await profileAPI.saveProfile(profileData)
 
     if (data.resultCode === 0) {
-        dispatch(setUserProfile(profileData))
-        dispatch(setSaveProfileResult(true))
+        dispatch(actions.setUserProfile(profileData))
+        dispatch(actions.setSaveProfileResult(true))
     } else {
         const contactTitle = data.messages[0].split(/[( -> )]/)
         const splitTitle = contactTitle[contactTitle.length - 2].toLowerCase()
-
         const errorObject = {
             'contacts': {
                 [splitTitle]: data.messages[0]
             }
         }
-
         dispatch(stopSubmit('editProfile', errorObject))
     }
 }

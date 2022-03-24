@@ -1,15 +1,8 @@
 import ToDoList from './ToDoList'
 import { connect, ConnectedProps } from 'react-redux'
-import {
-    addTodo,
-    deleteAllCompleteTodo,
-    deleteTodo,
-    filterTodo,
-    toggleAllTodo,
-    updateTodoStatus
-} from '../../redux/reducers/todoList-reducer'
+import { actions, addTodo } from '../../redux/reducers/todoList-reducer'
 import styles from './ToDo.module.scss'
-import { getCompleteTodosCount, getActiveTodosCount, getVisibleTodos } from '../../redux/selectors/todoList-selectors'
+import { getActiveTodosCount, getCompleteTodosCount, getVisibleTodos } from '../../redux/selectors/todoList-selectors'
 import { AppStateType } from '../../redux/redux-store'
 import { FC, MouseEvent } from 'react'
 
@@ -53,11 +46,11 @@ const mapStateToProps = (state: AppStateType) => {
 
 const mapDispatchToProps = {
     addTodo,
-    deleteAllCompleteTodo,
-    toggleAllTodo,
-    deleteTodo,
-    updateTodoStatus,
-    filterTodo
+    deleteAllCompleteTodo: actions.deleteAllCompleteTodo,
+    toggleAllTodo: actions.toggleAllTodo,
+    deleteTodo: actions.deleteTodo,
+    updateTodoStatus: actions.updateTodoStatus,
+    filterTodo: actions.filterTodo
 }
 
 const connector = connect(mapStateToProps, mapDispatchToProps)

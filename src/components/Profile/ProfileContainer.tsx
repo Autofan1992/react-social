@@ -1,9 +1,10 @@
-import React, { FC, useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import Profile from './Profile'
 import { connect, ConnectedProps } from 'react-redux'
 import {
     getUserProfile,
-    getUserStatus, saveProfile,
+    getUserStatus,
+    saveProfile,
     updateUserAvatar,
     updateUserStatus
 } from '../../redux/reducers/profile-reducer'
@@ -11,8 +12,10 @@ import { withRouter } from 'react-router'
 import { compose } from 'redux'
 import { getAuthUserId, getIsAuth } from '../../redux/selectors/auth-selectors'
 import {
-    getAvatarChangeResult, getIsFetchingAvatar,
-    getProfile, getSaveProfileResult,
+    getAvatarChangeResult,
+    getIsFetchingAvatar,
+    getProfile,
+    getSaveProfileResult,
     getStatus,
     getStatusChangeResult
 } from '../../redux/selectors/profile-selectors'
@@ -91,4 +94,4 @@ const connector = connect(mapStateToProps, MapDispatchToProps)
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-export default compose<React.FunctionComponent>(connector, withRouter, withAuthRedirect)(ProfileContainer)
+export default compose<FC>(connector, withRouter, withAuthRedirect)(ProfileContainer)

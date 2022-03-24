@@ -1,45 +1,38 @@
 import { FormAction, reset } from 'redux-form'
-import {DialogType, MessageType} from "../../types/types";
+import { DialogType, MessageType } from '../../types/types'
 import { ThunkAction } from 'redux-thunk'
-import { AppStateType } from '../redux-store'
-
-const ADD_MESSAGE = 'DIALOGS/ADD_MESSAGE'
+import { AppStateType, InferActionTypes } from '../redux-store'
 
 const initialState = {
     dialogs: [] as Array<DialogType>,
     messages: [] as Array<MessageType>,
 }
 
-export type InitialStateType = typeof initialState
-
-type ActionTypes = SetNewMessageActionType
+type InitialStateType = typeof initialState
+type ActionTypes = InferActionTypes<typeof actions>
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes | FormAction>
 
 const dialogsReducer = (state = initialState, action: ActionTypes): InitialStateType => {
     switch (action.type) {
-        case ADD_MESSAGE:
+        case 'DIALOGS/ADD_MESSAGE':
             return {
                 ...state,
-                messages: [...state.messages, {id: state.messages.length, message: action.payload}]
+                messages: [...state.messages, { id: state.messages.length, message: action.payload }]
             }
         default:
             return state
     }
 }
 
-type SetNewMessageActionType = {
-    type: typeof ADD_MESSAGE
-    payload: string
+const actions = {
+    setNewMessage: (message: string) => ({
+        type: 'DIALOGS/ADD_MESSAGE',
+        payload: message
+    } as const)
 }
 
-const setNewMessage = (message: string): SetNewMessageActionType => ({
-    type: ADD_MESSAGE,
-    payload: message
-})
-
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes | FormAction>
-
 export const addNewMessage = (message: string): ThunkType => async (dispatch) => {
-    dispatch(setNewMessage(message))
+    dispatch(actions.setNewMessage(message))
     dispatch(reset('messageForm'))
 }
 

@@ -2,7 +2,7 @@ import { weatherAPI, WeatherResultCodes } from '../../api/api'
 import { stopSubmit } from 'redux-form'
 import { ThunkAction } from 'redux-thunk'
 import { WeatherDataType } from '../../types/types'
-import { AppStateType } from '../redux-store'
+import { AppStateType, InferActionTypes } from '../redux-store'
 
 const SET_WEATHER_DATA = 'WEATHER/SET_WEATHER_DATA'
 const TOGGLE_IS_FETCHING = 'WEATHER/TOGGLE_IS_FETCHING'
@@ -12,7 +12,9 @@ const initialState = {
     isFetching: false as boolean
 }
 
-export type InitialStateType = typeof initialState
+type InitialStateType = typeof initialState
+type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>
+type ActionTypes = InferActionTypes<typeof actions>
 
 const weatherReducer = (state = initialState, action: ActionTypes): InitialStateType => {
     switch (action.type) {
@@ -31,42 +33,28 @@ const weatherReducer = (state = initialState, action: ActionTypes): InitialState
     }
 }
 
-type ActionTypes =
-    setWeatherDataActionType |
-    toggleFetchingActionType
-
-type setWeatherDataActionType = {
-    type: typeof SET_WEATHER_DATA
-    payload: WeatherDataType
+export const actions = {
+    setWeatherData: (payload: WeatherDataType) => ({
+        type: SET_WEATHER_DATA,
+        payload
+    } as const),
+    toggleFetching: (payload: boolean) => ({ type: TOGGLE_IS_FETCHING, payload } as const)
 }
-export const setWeatherData = (payload: WeatherDataType): setWeatherDataActionType => ({
-    type: SET_WEATHER_DATA,
-    payload
-})
-
-type toggleFetchingActionType = {
-    type: typeof TOGGLE_IS_FETCHING
-    payload: boolean
-}
-export const toggleFetching = (payload: boolean): toggleFetchingActionType => ({ type: TOGGLE_IS_FETCHING, payload })
-
-type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>
 
 export const getWeatherData = (cityName: string): ThunkType => async dispatch => {
-    dispatch(toggleFetching(true))
+    dispatch(actions.toggleFetching(true))
 
     const data = await weatherAPI.getWeatherData(cityName)
-
     try {
         if (data.cod === WeatherResultCodes.Success) {
-            dispatch(setWeatherData(data))
+            dispatch(actions.setWeatherData(data))
         } else {
             dispatch(stopSubmit('weatherForm', { city: data.message }))
         }
     } catch (e) {
         window.alert(e)
     } finally {
-        dispatch(toggleFetching(false))
+        dispatch(actions.toggleFetching(false))
     }
 }
 

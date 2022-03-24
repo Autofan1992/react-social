@@ -1,15 +1,21 @@
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import { AppStateType } from '../../redux/redux-store'
 import {
+    getBudgets,
+    getCurrentBudget,
     getExpenses,
-    getBudgets, getCurrentBudget, getExpensesById, getUncategorizedExpenses,
+    getExpensesById,
+    getUncategorizedExpenses,
 } from '../../redux/selectors/budgets-selectors'
 import {
+    actions,
     addBudget,
     addExpense,
     deleteBudget,
     deleteExpense,
-    requestBudgets, requestExpenses, setCurrentBudget, UNCATEGORIZED_BUDGET_ID,
+    requestBudgets,
+    requestExpenses,
+    UNCATEGORIZED_BUDGET_ID,
 } from '../../redux/reducers/budgets-reducer'
 import { connect, ConnectedProps } from 'react-redux'
 import BudgetForm from './BudgetForm'
@@ -144,7 +150,7 @@ const mapDispatchToProps = {
     deleteExpense,
     requestBudgets,
     requestExpenses,
-    setCurrentBudget
+    setCurrentBudget: actions.setCurrentBudget
 }
 
 const connector = connect(mapStateToProps, mapDispatchToProps)
