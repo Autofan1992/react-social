@@ -31,7 +31,7 @@ const profileReducer = (state = initialState, action: ActionTypes): InitialState
                 ...state,
                 posts: [...state.posts, {
                     id: state.posts.length,
-                    text: action.payload,
+                    post: action.payload,
                     likesCount: 0
                 }]
             }
@@ -123,8 +123,8 @@ export const actions = {
     } as const)
 }
 
-export const addPost = (text: string): ThunkType => async dispatch => {
-    dispatch(actions.setNewPost(text))
+export const addPost = (post: string): ThunkType => async dispatch => {
+    dispatch(actions.setNewPost(post))
     dispatch(reset('postForm'))
 }
 

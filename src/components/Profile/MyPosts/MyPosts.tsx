@@ -10,15 +10,16 @@ const maxLength10 = maxLength(10)
 const minLength2 = minLength(2)
 
 type PropsType = {
-    addPost: (text: string) => void
+    addPost: (post: string) => void
+    deletePost: (id: number) => void
     likePost: (id: number) => void
     posts: Array<PostType>
 }
 
-const MyPosts: FC<PropsType> = ({ addPost, likePost, posts }) => {
+const MyPosts: FC<PropsType> = ({ addPost, deletePost, likePost, posts }) => {
 
-    const addNewPost = (values: PostType) => {
-        addPost(values.text)
+    const addNewPost = ({ post }: PostType) => {
+        addPost(post)
     }
 
     return (
@@ -31,9 +32,10 @@ const MyPosts: FC<PropsType> = ({ addPost, likePost, posts }) => {
                 {posts
                     .map((p) => <Post
                         key={p.id} id={p.id}
-                        text={p.text}
+                        post={p.post}
                         likesCount={p.likesCount}
                         likePost={likePost}
+                        deletePost={deletePost}
                     />)
                 }
             </ul>
@@ -41,11 +43,12 @@ const MyPosts: FC<PropsType> = ({ addPost, likePost, posts }) => {
     )
 }
 
-function PostForm({ handleSubmit }: InjectedFormProps<PostType>) {
+type InputNames = keyof PostType
+const PostForm: FC<InjectedFormProps<PostType>> = ({ handleSubmit }) => {
     return (
         <form onSubmit={handleSubmit}>
             <div className="input-block">
-                {createField('Start typing something...', 'post', [requiredField, maxLength10, minLength2], Textarea)}
+                {createField<InputNames>('Start typing something...', 'post', [requiredField, maxLength10, minLength2], Textarea)}
             </div>
             <button className="btn btn-primary mt-3">Add Post</button>
         </form>

@@ -4,7 +4,7 @@ export type FriendsType = {
 
 export type PostType = {
     id: number
-    text: string
+    post: string
     likesCount: number
 }
 

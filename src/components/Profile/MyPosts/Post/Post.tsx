@@ -3,27 +3,31 @@ import avatar from '../../../../images/user.svg'
 import { FC } from 'react'
 
 type PropsType = {
-    text: string
+    post: string
     id: number
+    deletePost: (id: number) => void
     likePost: (id: number) => void
     likesCount: number
 }
 
-const Post: FC<PropsType> = ({ text, id, likePost, likesCount }) => {
+const Post: FC<PropsType> = ({ post, id, likePost, deletePost, likesCount }) => {
     return (
         <li className={`${styles.postItem} list-group-item`}>
             <div className="d-flex">
                 <div className={styles.avatar}>
                     <img src={avatar} className="w-100" alt=""/>
                 </div>
-                <div>{text}</div>
+                <div>{post}</div>
             </div>
             <hr/>
             <div className="d-flex">
-                {!likesCount ? 'Нажмите палец вверх' :
-                    <span className="me-2">Нравиться: {likesCount}</span>}
+                {!likesCount ? 'Click thumb up' :
+                    <span className="me-2">Likes: {likesCount}</span>}
                 <span className="ms-auto"
                       onClick={() => likePost(id)}>👍</span>
+            </div>
+            <div className="d-flex">
+                <button onClick={() => deletePost(id)}>Delete post</button>
             </div>
         </li>
     )

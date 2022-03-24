@@ -11,4 +11,4 @@ const mapStateToProps = (state: AppStateType) => {
     }
 }
 
-export default connect(mapStateToProps, { addPost, likePost: actions.likePost })(MyPosts)
+export default connect(mapStateToProps, { addPost, deletePost: actions.deletePost, likePost: actions.likePost })(MyPosts)
