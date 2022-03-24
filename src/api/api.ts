@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { PhotosType, ProfileType, UserType } from '../types/types'
+import { ProfileType, UserType } from '../types/types'
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.0/',
@@ -89,45 +89,33 @@ export const authAPI = {
     }
 }
 
-type SetStatusResponse = {
-    resultCode: ResultCodesEnum
-}
-
-type SetAvatarResponse = {
-    data: {
-        photos: PhotosType
-    }
-    resultCode: ResultCodesEnum
-    messages: Array<string>
-}
-
-type SaveProfileResponse = {
-    data: any
+type ProfileResponseType<D = void> = {
+    data: D
     resultCode: ResultCodesEnum
     messages: Array<string>
 }
 
 export const profileAPI = {
     getProfile(userId: number) {
-        return instance.get<AuthProfileResponse>(`profile/${userId}`).then(res => res.data)
+        return instance.get<ProfileType>(`profile/${userId}`).then(res => res.data)
     },
     getStatus(userId: number) {
         return instance.get<string>(`profile/status/${userId}`).then(res => res.data)
     },
     setStatus(status: string) {
-        return instance.put<SetStatusResponse>(`profile/status`, { status }).then(res => res.data)
+        return instance.put<ProfileResponseType>(`profile/status`, { status }).then(res => res.data)
     },
     setAvatar(avatar: File) {
         const formData = new FormData()
         formData.append('image', avatar)
-        return instance.put<SetAvatarResponse>(`profile/photo`, formData, {
+        return instance.put<ProfileResponseType<UserType>>(`profile/photo`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         }).then(res => res.data)
     },
     saveProfile(profile: ProfileType) {
-        return instance.put<SaveProfileResponse>(`profile`, profile).then(res => res.data)
+        return instance.put<ProfileResponseType>(`profile`, profile).then(res => res.data)
     }
 }
 

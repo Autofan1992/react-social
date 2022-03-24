@@ -1,3 +1,6 @@
+export type InferActionCreators<T> = T extends { [key: string]: infer U }
+    ? U
+    : never
 export type PostType = {
     id: number
     text: string
