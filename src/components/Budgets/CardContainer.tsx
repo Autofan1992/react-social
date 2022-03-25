@@ -3,7 +3,6 @@ import { currencyFormatter } from '../../redux/utilities/currencyFormatter'
 import { BudgetType, ExpenseType } from '../../types/types'
 import BudgetCard from './BudgetCard'
 import { UNCATEGORIZED_BUDGET_ID } from '../../redux/reducers/budgets-reducer'
-import { FC } from 'react'
 
 type PropsType = {
     totalExpenses: number
@@ -15,7 +14,7 @@ type PropsType = {
     showAddExpensesModal: (id: string, name: string) => any
 }
 
-const CardContainer: FC<PropsType> = (
+const CardContainer = (
     {
         totalExpenses,
         totalBudget,
@@ -24,7 +23,7 @@ const CardContainer: FC<PropsType> = (
         showAddExpensesModal,
         showViewExpensesModal,
         getCurrentBudgetExpenses
-    }) => {
+    }: PropsType) => {
 
     const totalUncategorizedExpenses = uncategorizedExpenses.reduce((acc, amount) => acc + amount.amount, 0)
 

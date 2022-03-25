@@ -3,7 +3,6 @@ import { BudgetType } from '../../types/types'
 import { Input } from '../common/FormControls/FormControls'
 import { maxLength, minLength, requiredField } from '../../redux/utilities/validators/validators'
 import { Button, Modal } from 'antd'
-import { FC } from 'react'
 
 const maxLength500 = maxLength(500)
 const minLength2 = minLength(2)
@@ -13,12 +12,12 @@ type PropsType = {
     handleCancel: () => void
 }
 
-const AddBudgetForm: FC<InjectedFormProps<BudgetType, PropsType> & PropsType> = (
+const AddBudgetForm = (
     {
         handleSubmit,
         isModalVisible,
         handleCancel
-    }) => {
+    }: InjectedFormProps<BudgetType, PropsType> & PropsType) => {
 
     return (
         <Modal footer={null} title="Basic Modal" visible={isModalVisible} onCancel={handleCancel}>

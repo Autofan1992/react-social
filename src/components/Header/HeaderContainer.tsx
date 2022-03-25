@@ -6,10 +6,7 @@ import { AppStateType } from '../../redux/redux-store'
 import React, { FC } from 'react'
 
 const HeaderContainer: FC<PropsFromRedux> = ({ logout, ...props }) => {
-
-    const handleLogout = () => {
-        logout()
-    }
+    const handleLogout = () => logout()
 
     return (
         <Header {...props} handleLogout={handleLogout}/>

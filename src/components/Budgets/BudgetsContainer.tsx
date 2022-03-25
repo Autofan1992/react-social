@@ -20,7 +20,7 @@ import {
 import { connect, ConnectedProps } from 'react-redux'
 import BudgetForm from './BudgetForm'
 import { BudgetType, ExpenseType } from '../../types/types'
-import { FC, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useToggle } from '../../hooks/useToggle'
 import ExpenseForm from './ExpenseForm'
 import ViewExpensesModal from './ViewExpensesModal'
@@ -29,7 +29,7 @@ import './Budgets.module.scss'
 
 const { Title } = Typography
 
-const BudgetsContainer: FC<PropsFromRedux> = (
+const BudgetsContainer = (
     {
         budgets,
         expenses,
@@ -42,7 +42,7 @@ const BudgetsContainer: FC<PropsFromRedux> = (
         setCurrentBudget,
         currentBudget,
         uncategorizedExpenses
-    }) => {
+    }: PropsFromRedux) => {
 
     useEffect(() => {
         requestBudgets()

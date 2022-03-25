@@ -3,11 +3,12 @@ import logo from '../../images/logo.svg'
 import user from '../../images/user.svg'
 import { NavLink } from 'react-router-dom'
 import { FC } from 'react'
+import { PhotosType } from '../../types/types'
 
 type PropsType = {
     isAuth: boolean
     userId: number | null
-    userPhoto: string | null
+    userPhoto: PhotosType | null
     userLogin: string | null
     handleLogout: () => void
 }
@@ -30,7 +31,7 @@ const Header: FC<PropsType> = props => {
                     ? <div className={styles.userInfo}>
                         <NavLink to={`/profile/${userId}`}>
                             <div className={styles.avatar}>
-                                <img src={userPhoto ? userPhoto : user} alt="avatar"/>
+                                <img src={userPhoto?.small ?? user} alt="avatar"/>
                             </div>
                         </NavLink>
                         <div className="text-center">

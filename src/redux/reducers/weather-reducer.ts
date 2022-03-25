@@ -1,8 +1,9 @@
-import { weatherAPI, WeatherResultCodes } from '../../api/api'
+import { WeatherResultCodes } from '../../api/api'
 import { stopSubmit } from 'redux-form'
 import { ThunkAction } from 'redux-thunk'
 import { WeatherDataType } from '../../types/types'
 import { AppStateType, InferActionTypes } from '../redux-store'
+import { weatherAPI } from '../../api/weather-api'
 
 const SET_WEATHER_DATA = 'WEATHER/SET_WEATHER_DATA'
 const TOGGLE_IS_FETCHING = 'WEATHER/TOGGLE_IS_FETCHING'

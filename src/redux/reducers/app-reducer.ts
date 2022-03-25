@@ -27,9 +27,8 @@ const actions = {
 }
 
 export const initializeApp = (): ThunkType => async dispatch => {
-    await getAuthUserData()
+    await dispatch(getAuthUserData())
     dispatch(actions.setInitializingSuccess())
 }
-
 
 export default appReducer

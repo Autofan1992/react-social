@@ -1,7 +1,7 @@
-import { userAPI } from '../../api/api'
 import { UserType } from '../../types/types'
 import { ThunkAction } from 'redux-thunk'
 import { AppStateType, InferActionTypes } from '../redux-store'
+import { userAPI } from '../../api/users-api'
 
 const TOGGLE_FOLLOW_USER = 'USERS/TOGGLE_FOLLOW_USER'
 const SET_USERS = 'USERS/SET_USERS'
@@ -90,14 +90,15 @@ export const requestUsers = (pageNumber: number, pageSize: number): ThunkType =>
     dispatch(actions.setUsers(data.items))
     dispatch(actions.setTotalUsersCount(data.totalCount))
     dispatch(actions.setCurrentPage(pageNumber))
+
     dispatch(actions.toggleIsFetching(false))
 }
 
 export const followUserToggle = (userId: number, followed: boolean): ThunkType => async dispatch => {
-    const followFn = !followed ? userAPI.followUserRequest : userAPI.unfollowUserRequest
+    const followMethod = !followed ? userAPI.followUserRequest : userAPI.unfollowUserRequest
     dispatch(actions.toggleFollowingProgress(true, userId))
 
-    const data = await followFn(userId)
+    const data = await followMethod(userId)
     if (data.resultCode === 0) {
         dispatch(actions.setToggleFollow(userId))
         dispatch(actions.toggleFollowingProgress(false, userId))

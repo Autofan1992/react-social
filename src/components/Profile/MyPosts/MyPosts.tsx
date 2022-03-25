@@ -4,7 +4,6 @@ import { InjectedFormProps, reduxForm } from 'redux-form'
 import { maxLength, minLength, requiredField } from '../../../redux/utilities/validators/validators'
 import { createField, Textarea } from '../../common/FormControls/FormControls'
 import { PostType } from '../../../types/types'
-import { FC } from 'react'
 
 const maxLength10 = maxLength(10)
 const minLength2 = minLength(2)
@@ -16,11 +15,8 @@ type PropsType = {
     posts: Array<PostType>
 }
 
-const MyPosts: FC<PropsType> = ({ addPost, deletePost, likePost, posts }) => {
-
-    const addNewPost = ({ post }: PostType) => {
-        addPost(post)
-    }
+const MyPosts = ({ addPost, deletePost, likePost, posts }: PropsType) => {
+    const addNewPost = ({ post }: PostType) => addPost(post)
 
     return (
         <div className={styles.myPosts}>
@@ -44,7 +40,7 @@ const MyPosts: FC<PropsType> = ({ addPost, deletePost, likePost, posts }) => {
 }
 
 type InputNames = keyof PostType
-const PostForm: FC<InjectedFormProps<PostType>> = ({ handleSubmit }) => {
+const PostForm = ({ handleSubmit }: InjectedFormProps<PostType>) => {
     return (
         <form onSubmit={handleSubmit}>
             <div className="input-block">

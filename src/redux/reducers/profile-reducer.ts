@@ -1,8 +1,8 @@
-import { profileAPI } from '../../api/api'
 import { FormAction, reset, stopSubmit } from 'redux-form'
 import { PostType, ProfileType } from '../../types/types'
 import { ThunkAction } from 'redux-thunk'
 import { AppStateType, InferActionTypes } from '../redux-store'
+import { profileAPI } from '../../api/profile-api'
 
 const initialState = {
     posts: [] as Array<PostType>,

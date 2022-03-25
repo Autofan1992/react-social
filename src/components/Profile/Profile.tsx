@@ -2,6 +2,7 @@ import ProfileInfo from './ProfileInfo/ProfileInfo'
 import ProfileForm from './ProfileForm/ProfileForm'
 import { FC, useState } from 'react'
 import { ProfileType } from '../../types/types'
+import Preloader from '../common/preloader/Preloader'
 
 type PropsType = {
     saveProfile: (formData: ProfileType) => void
@@ -19,7 +20,7 @@ type PropsType = {
     error: string
 }
 
-const Profile: FC<PropsType> = ({ saveProfile, saveProfileResult, ...props }) => {
+const Profile: FC<PropsType> = ({ saveProfile, saveProfileResult, isAuth, ...props }) => {
     const [editMode, setEditMode] = useState(false)
 
     const toggleEditMode = () => {
@@ -30,6 +31,8 @@ const Profile: FC<PropsType> = ({ saveProfile, saveProfileResult, ...props }) =>
         saveProfile(formData)
         saveProfileResult && toggleEditMode()
     }
+
+    if (!isAuth) return <Preloader/>
 
     return (
         <>

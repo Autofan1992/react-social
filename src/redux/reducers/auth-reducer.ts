@@ -1,14 +1,15 @@
-import { authAPI, CaptchaResultCode, ResultCodesEnum } from '../../api/api'
+import { CaptchaResultCode, ResultCodesEnum } from '../../api/api'
 import { stopSubmit } from 'redux-form'
 import { ThunkAction } from 'redux-thunk'
-import { ProfileType } from '../../types/types'
+import { PhotosType, ProfileType } from '../../types/types'
 import { AppStateType, InferActionTypes } from '../redux-store'
+import { authAPI } from '../../api/auth-api'
 
 const initialState = {
     userId: null as number | null,
     email: null as string | null,
     login: null as string | null,
-    userPhoto: null as string | null,
+    userPhoto: null as PhotosType | null,
     isAuth: false as boolean,
     authError: null as string | null,
     captchaUrl: null as string | null,
@@ -42,7 +43,7 @@ const authReducer = (state = initialState, action: ActionTypes): InitialStateTyp
 }
 
 const actions = {
-    setAuthUserData: (isAuth: boolean, userId: number | null, email: string | null, login: string | null, userPhoto: string | null) => ({
+    setAuthUserData: (isAuth: boolean, userId: number | null, email: string | null, login: string | null, userPhoto: PhotosType | null) => ({
         type: 'AUTH/SET_USER_DATA',
         payload: { userId, email, login, userPhoto, isAuth }
     } as const),
@@ -61,7 +62,7 @@ export const getAuthUserData = (): ThunkType => async dispatch => {
     if (userData.resultCode === ResultCodesEnum.Success) {
         const { id, email, login } = userData.data
         const authData = await authAPI.getAuthProfile(id)
-        dispatch(actions.setAuthUserData(true, id, email, login, authData.photos.small))
+        dispatch(actions.setAuthUserData(true, id, email, login, authData.photos))
     }
 }
 
@@ -73,13 +74,10 @@ export const login = ({ email, password, rememberMe, captcha }: ProfileType): Th
         if (loginData.resultCode === ResultCodesEnum.Success) {
             // logged in, sending profile request
             await dispatch(getAuthUserData())
-            dispatch(actions.setCaptcha(''))
-
         } else if (loginData.resultCode > ResultCodesEnum.Success && loginData.resultCode < CaptchaResultCode.CaptchaIsRequired) {
             // error in form fields
             dispatch(stopSubmit('loginForm', { _error: 'Проверьте логин и/или пароль' }))
         }
-
         if (loginData.resultCode === CaptchaResultCode.CaptchaIsRequired) {
             // many wrong requests, sending captcha request
             dispatch(stopSubmit('loginForm', { _error: 'Проверьте логин и/или пароль, а также введите символы изображенные на картинке в поле ниже' }))

@@ -1,6 +1,5 @@
 import styles from './Post.module.scss'
 import avatar from '../../../../images/user.svg'
-import { FC } from 'react'
 
 type PropsType = {
     post: string
@@ -10,7 +9,7 @@ type PropsType = {
     likesCount: number
 }
 
-const Post: FC<PropsType> = ({ post, id, likePost, deletePost, likesCount }) => {
+const Post = ({ post, id, likePost, deletePost, likesCount }: PropsType) => {
     return (
         <li className={`${styles.postItem} list-group-item`}>
             <div className="d-flex">
