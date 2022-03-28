@@ -1,11 +1,5 @@
 import { ProfileType, UserType } from '../types/types'
-import { instance, ResultCodesEnum } from './api'
-
-type ProfileResponseType<D = {}, RC = ResultCodesEnum> = {
-    data: D
-    resultCode: RC
-    messages: Array<string>
-}
+import { APIResponseType, instance } from './api'
 
 export const profileAPI = {
     getProfile: (userId: number) => instance
@@ -15,13 +9,13 @@ export const profileAPI = {
         .get<string>(`profile/status/${userId}`)
         .then(res => res.data),
     setStatus: (status: string) => instance
-        .put<ProfileResponseType>(`profile/status`, { status })
+        .put<APIResponseType>(`profile/status`, { status })
         .then(res => res.data),
     setAvatar: (avatar: File) => {
         const formData = new FormData()
         formData.append('image', avatar)
         return instance
-            .put<ProfileResponseType<UserType>>(`profile/photo`, formData, {
+            .put<APIResponseType<UserType>>(`profile/photo`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -29,6 +23,6 @@ export const profileAPI = {
             .then(res => res.data)
     },
     saveProfile: (profile: ProfileType) => instance
-        .put<ProfileResponseType>(`profile`, profile)
+        .put<APIResponseType>(`profile`, profile)
         .then(res => res.data)
 }
