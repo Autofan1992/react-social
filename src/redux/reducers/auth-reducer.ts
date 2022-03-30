@@ -1,8 +1,7 @@
 import { CaptchaResultCode, ResultCodesEnum } from '../../api/api'
 import { stopSubmit } from 'redux-form'
-import { ThunkAction } from 'redux-thunk'
 import { PhotosType, ProfileType } from '../../types/types'
-import { AppStateType, InferActionTypes } from '../redux-store'
+import { BaseThunkType, InferActionTypes } from '../redux-store'
 import { authAPI } from '../../api/auth-api'
 
 const initialState = {
@@ -15,10 +14,6 @@ const initialState = {
     captchaUrl: null as string | null,
     isFetching: false
 }
-
-type InitialStateType = typeof initialState
-type ActionTypes = InferActionTypes<typeof actions>
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
 
 const authReducer = (state = initialState, action: ActionTypes): InitialStateType => {
     switch (action.type) {
@@ -98,5 +93,9 @@ export const logout = (): ThunkType => async dispatch => {
         dispatch(actions.setAuthUserData(false, null, null, null, null))
     }
 }
+
+type InitialStateType = typeof initialState
+type ActionTypes = InferActionTypes<typeof actions>
+type ThunkType = BaseThunkType<ActionTypes>
 
 export default authReducer

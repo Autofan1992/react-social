@@ -1,8 +1,7 @@
 import { BudgetType, CurrentBudgetType, ExpenseType } from '../../types/types'
 import { v4 as uuidV4 } from 'uuid'
 import { FormAction, reset } from 'redux-form'
-import { ThunkAction } from 'redux-thunk'
-import { AppStateType, InferActionTypes } from '../redux-store'
+import { BaseThunkType, InferActionTypes } from '../redux-store'
 
 export const UNCATEGORIZED_BUDGET_ID = 'uncategorized'
 
@@ -14,11 +13,7 @@ const initialState = {
     expenses: [] as Array<ExpenseType>
 }
 
-type initialStateType = typeof initialState
-type ActionTypes = InferActionTypes<typeof actions>
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes | FormAction>
-
-const budgetsReducer = (state = initialState, action: ActionTypes): initialStateType => {
+const budgetsReducer = (state = initialState, action: ActionTypes): InitialStateType => {
     switch (action.type) {
         case 'BUDGET/SET_CURRENT_BUDGET':
             return {
@@ -178,5 +173,9 @@ export const addBudget = (name: string, max: number): ThunkType => async (dispat
     const budgets = getState().budgetsPage.budgets
     localStorage.setItem('budgets', JSON.stringify(budgets))
 }
+
+type InitialStateType = typeof initialState
+type ActionTypes = InferActionTypes<typeof actions>
+type ThunkType = BaseThunkType<ActionTypes | FormAction>
 
 export default budgetsReducer

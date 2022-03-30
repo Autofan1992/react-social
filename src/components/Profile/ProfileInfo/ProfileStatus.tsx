@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, FC } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import styles from './ProfileInfo.module.scss'
 
 type PropsType = {
@@ -8,7 +8,7 @@ type PropsType = {
     isOwner: boolean
 }
 
-const ProfileStatus: FC<PropsType> = ({ status, statusChangeResult, updateUserStatus, isOwner }) => {
+const ProfileStatus = ({ status, statusChangeResult, updateUserStatus, isOwner }: PropsType) => {
     const [currentStatus, setStatus] = useState('')
     const [editMode, toggleEditMode] = useState(false)
 
@@ -50,7 +50,7 @@ const ProfileStatus: FC<PropsType> = ({ status, statusChangeResult, updateUserSt
                     <p className="mb-0">{status}</p>
                 </div>
                 {isOwner &&
-                    <button className="btn-sm" style={{marginLeft: '.5rem'}} onClick={handleEditMode}>Change</button>}
+                    <button className="btn-sm" style={{ marginLeft: '.5rem' }} onClick={handleEditMode}>Change</button>}
             </div>
             {editMode &&
                 <div className={styles.forInput}>
