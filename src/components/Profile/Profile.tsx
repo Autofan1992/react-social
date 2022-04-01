@@ -1,6 +1,6 @@
 import ProfileInfo from './ProfileInfo/ProfileInfo'
 import ProfileForm from './ProfileForm/ProfileForm'
-import { FC, useState } from 'react'
+import { useState } from 'react'
 import { ProfileType } from '../../types/types'
 import Preloader from '../common/preloader/Preloader'
 
@@ -20,7 +20,7 @@ type PropsType = {
     error: string
 }
 
-const Profile: FC<PropsType> = ({ saveProfile, saveProfileResult, isAuth, ...props }) => {
+const Profile = ({ saveProfile, saveProfileResult, isAuth, ...props }: PropsType) => {
     const [editMode, setEditMode] = useState(false)
 
     const toggleEditMode = () => {

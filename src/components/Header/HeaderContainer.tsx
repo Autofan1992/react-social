@@ -3,9 +3,9 @@ import { logout } from '../../redux/reducers/auth-reducer'
 import { connect, ConnectedProps } from 'react-redux'
 import { getAuthUserId, getAuthUserLogin, getAuthUserPhoto, getIsAuth } from '../../redux/selectors/auth-selectors'
 import { AppStateType } from '../../redux/redux-store'
-import React, { FC } from 'react'
+import React from 'react'
 
-const HeaderContainer: FC<PropsFromRedux> = ({ logout, ...props }) => {
+const HeaderContainer = ({ logout, ...props }: PropsFromRedux) => {
     const handleLogout = () => logout()
 
     return (

@@ -1,11 +1,11 @@
 import { addNewMessage } from '../../redux/reducers/dialogs-reducer'
 import Dialogs from './Dialogs'
 import { connect } from 'react-redux'
-import withAuthRedirect from '../../hoc/withAuthRedirect'
 import { compose } from 'redux'
 import { getDialogs, getMessages } from '../../redux/selectors/dialogs-selectors'
 import { AppStateType } from '../../redux/redux-store'
-import React from 'react'
+import { FC } from 'react'
+import withAuthRedirect from '../../hoc/withAuthRedirect'
 
 const mapState = (state: AppStateType) => {
     return {
@@ -18,4 +18,4 @@ const mapDispatch = {
     addNewMessage
 }
 
-export default compose<React.FunctionComponent>(connect(mapState, mapDispatch), withAuthRedirect)(Dialogs)
+export default compose<FC>(connect(mapState, mapDispatch), withAuthRedirect)(Dialogs)

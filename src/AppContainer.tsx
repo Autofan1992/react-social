@@ -4,7 +4,7 @@ import { initializeApp } from './redux/reducers/app-reducer'
 import { connect, ConnectedProps } from 'react-redux'
 import { compose } from 'redux'
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom'
-import { FC, FunctionComponent, lazy, Suspense, useEffect } from 'react'
+import { FC, lazy, Suspense, useEffect } from 'react'
 import Preloader from './components/common/preloader/Preloader'
 import HeaderContainer from './components/Header/HeaderContainer'
 import Navbar from './components/Navbar/Navbar'
@@ -17,12 +17,15 @@ import WeatherContainer from './components/Weather/WeatherContainer'
 import BudgetsContainer from './components/Budgets/BudgetsContainer'
 import NotFound from './components/common/404/404'
 import { getIsAuth } from './redux/selectors/auth-selectors'
+import withSuspense from './hoc/withSuspense'
 
 const DialogsContainer = lazy(() => import('./components/Dialogs/DialogsContainer'))
 const ProfileContainer = lazy(() => import('./components/Profile/ProfileContainer'))
 const UsersContainer = lazy(() => import('./components/Users/UsersContainer'))
 
-const AppContainer: FC<PropsFromRedux> = ({ initialized, initializeApp, isAuth }) => {
+const SuspenseProfile = withSuspense(ProfileContainer)
+
+const AppContainer = ({ initialized, initializeApp, isAuth }: PropsFromRedux) => {
     const handleAllUnhandledErrors = (reason: any) => {
         alert(reason.reason)
     }
@@ -52,7 +55,7 @@ const AppContainer: FC<PropsFromRedux> = ({ initialized, initializeApp, isAuth }
                                 </Route>
                                 <Route path="/login" render={() => <Login/>}/>
                                 <Route path="/dialogs" render={() => <DialogsContainer/>}/>
-                                <Route path="/profile/:userId?" render={() => <ProfileContainer/>}/>
+                                <Route path="/profile/:userId?" render={() => <SuspenseProfile/>}/>
                                 <Route path="/news" render={() => <News/>}/>
                                 <Route path="/music" render={() => <Music/>}/>
                                 <Route path="/settings" render={() => <Settings/>}/>
@@ -83,4 +86,4 @@ const connector = connect(mapState, mapDispatch)
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-export default compose<FunctionComponent>(connector, withRouter)(AppContainer)
+export default compose<FC>(connector, withRouter)(AppContainer)
