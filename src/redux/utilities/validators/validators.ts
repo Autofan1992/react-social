@@ -1,6 +1,6 @@
 export type FieldValidatorType = (value: string) => string | undefined
 
-export const requiredField: FieldValidatorType = (value) => {
+export const requiredField: FieldValidatorType = value => {
     return value ? undefined : 'Это поле обьязательно для заполнения'
 }
 

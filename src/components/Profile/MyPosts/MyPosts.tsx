@@ -4,18 +4,12 @@ import { InjectedFormProps, reduxForm } from 'redux-form'
 import { maxLength, minLength, requiredField } from '../../../redux/utilities/validators/validators'
 import { createField, Textarea } from '../../common/FormControls/FormControls'
 import { PostType } from '../../../types/types'
+import { FC } from 'react'
 
 const maxLength10 = maxLength(10)
 const minLength2 = minLength(2)
 
-type PropsType = {
-    addPost: (post: string) => void
-    deletePost: (id: number) => void
-    likePost: (id: number) => void
-    posts: Array<PostType>
-}
-
-const MyPosts = ({ addPost, deletePost, likePost, posts }: PropsType) => {
+const MyPosts: FC<PropsType> = ({ addPost, deletePost, likePost, posts }) => {
     const addNewPost = ({ post }: PostType) => addPost(post)
 
     return (
@@ -40,7 +34,8 @@ const MyPosts = ({ addPost, deletePost, likePost, posts }: PropsType) => {
 }
 
 type InputNames = keyof PostType
-const PostForm = ({ handleSubmit }: InjectedFormProps<PostType>) => {
+
+const PostForm: FC<InjectedFormProps<PostType>> = ({ handleSubmit }) => {
     return (
         <form onSubmit={handleSubmit}>
             <div className="input-block">
@@ -52,5 +47,12 @@ const PostForm = ({ handleSubmit }: InjectedFormProps<PostType>) => {
 }
 
 const PostReduxForm = reduxForm<PostType>({ form: 'postForm' })(PostForm)
+
+type PropsType = {
+    addPost: (post: string) => void
+    deletePost: (id: number) => void
+    likePost: (id: number) => void
+    posts: Array<PostType>
+}
 
 export default MyPosts

@@ -11,7 +11,7 @@ type PropsType = {
     error: string
 }
 
-type ProfileFormInputNamesKeys = keyof ProfileType
+type InputNames = keyof ProfileType
 
 const ProfileForm: FC<InjectedFormProps<ProfileType, PropsType> & PropsType> = ({ profile, handleSubmit, error }) => {
     return (
@@ -27,11 +27,11 @@ const ProfileForm: FC<InjectedFormProps<ProfileType, PropsType> & PropsType> = (
                                 <p>
                                     <span className="fw-bold">Full name</span>
                                 </p>
-                                {createField<ProfileFormInputNamesKeys>('Type your full name', 'fullName', [requiredField], Input, profile.fullName)}
+                                {createField<InputNames>('Type your full name', 'fullName', [requiredField], Input, profile.fullName)}
                             </div>
                             <div className={styles.fieldBlock}>
                                 <p><b>About me</b></p>
-                                {createField('Write about yourself', 'aboutMe', [], Textarea, profile.aboutMe)}
+                                {createField<InputNames>('Write about yourself', 'aboutMe', [], Textarea, profile.aboutMe)}
                             </div>
                         </div>
                         <div className={styles.infoBlock}>
@@ -39,13 +39,13 @@ const ProfileForm: FC<InjectedFormProps<ProfileType, PropsType> & PropsType> = (
                                 <p style={{ marginRight: '.5rem' }}>
                                     <span className="fw-bold">Looking for a job</span>
                                 </p>
-                                {createField('', 'lookingForAJob', [], CheckBox, { type: 'checkbox' })}
+                                {createField<InputNames>('', 'lookingForAJob', [], CheckBox, { type: 'checkbox' })}
                             </div>
                             <div className={styles.fieldBlock}>
                                 <p>
                                     <span className="fw-bold">My skills</span>
                                 </p>
-                                {createField('Type your skills', 'lookingForAJobDescription', [], Textarea, profile.lookingForAJobDescription)}
+                                {createField<InputNames>('Type your skills', 'lookingForAJobDescription', [], Textarea, profile.lookingForAJobDescription)}
                             </div>
                         </div>
                     </div>

@@ -50,6 +50,7 @@ export const createField = <KeysType extends string>(
     validators: Array<FieldValidatorType>,
     component: string | FC<WrappedFieldProps>,
     props = {},
+    parse?: (value: number) => number,
     text = '') => (
 
     <div>
