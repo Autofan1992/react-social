@@ -3,18 +3,9 @@ import { currencyFormatter } from '../../redux/utilities/currencyFormatter'
 import { BudgetType, ExpenseType } from '../../types/types'
 import BudgetCard from './BudgetCard'
 import { UNCATEGORIZED_BUDGET_ID } from '../../redux/reducers/budgets-reducer'
+import { FC } from 'react'
 
-type PropsType = {
-    totalExpenses: number
-    totalBudget: number
-    budgets: Array<BudgetType>
-    uncategorizedExpenses: Array<ExpenseType>
-    getCurrentBudgetExpenses: (id: string) => Array<ExpenseType>
-    showViewExpensesModal: (id: string, name: string) => any
-    showAddExpensesModal: (id: string, name: string) => any
-}
-
-const CardContainer = (
+const CardContainer: FC<PropsType> = (
     {
         totalExpenses,
         totalBudget,
@@ -23,7 +14,7 @@ const CardContainer = (
         showAddExpensesModal,
         showViewExpensesModal,
         getCurrentBudgetExpenses
-    }: PropsType) => {
+    }) => {
 
     const totalUncategorizedExpenses = uncategorizedExpenses.reduce((acc, amount) => acc + amount.amount, 0)
 
@@ -34,13 +25,15 @@ const CardContainer = (
                         const amount = getCurrentBudgetExpenses(budget.id).reduce((acc, expense) => acc + expense.amount, 0)
                         const expensesPercent = Math.round((amount / budget.max) * 100)
 
-                        return <Col md={12} key={budget.id}>
-                            <BudgetCard
-                                name={budget.name} id={budget.id} max={budget.max}
-                                expensesPercent={expensesPercent} amount={amount}
-                                showViewExpensesModal={showViewExpensesModal}
-                                showAddExpensesModal={showAddExpensesModal}/>
-                        </Col>
+                        return (
+                            <Col md={12} key={budget.id}>
+                                <BudgetCard
+                                    name={budget.name} id={budget.id} max={budget.max}
+                                    expensesPercent={expensesPercent} amount={amount}
+                                    showViewExpensesModal={showViewExpensesModal}
+                                    showAddExpensesModal={showAddExpensesModal}/>
+                            </Col>
+                        )
                     }
                 )}
             </Row>
@@ -60,3 +53,13 @@ const CardContainer = (
 }
 
 export default CardContainer
+
+type PropsType = {
+    totalExpenses: number
+    totalBudget: number
+    budgets: Array<BudgetType>
+    uncategorizedExpenses: Array<ExpenseType>
+    getCurrentBudgetExpenses: (id: string) => Array<ExpenseType>
+    showViewExpensesModal: (id: string, name: string) => any
+    showAddExpensesModal: (id: string, name: string) => any
+}

@@ -24,7 +24,7 @@ export const getSaveProfileResult = (state: AppStateType) => {
     return state.profilePage.saveProfileResult
 }
 
-export const getPostID = (state: AppStateType) => {
+export const getPostId = (state: AppStateType) => {
     return state.profilePage.posts.length
 }
 

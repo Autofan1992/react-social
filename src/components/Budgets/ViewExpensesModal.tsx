@@ -6,16 +6,6 @@ import { FC } from 'react'
 
 const { Title, Paragraph } = Typography
 
-type PropsType = {
-    deleteExpense: (id: string) => void
-    deleteBudget: (id: string) => void
-    budgetExpense: CurrentBudgetType
-    isModalVisible: boolean
-    handleCancel: () => void
-    setCurrentBudget: (id: string, name: string) => void
-    getCurrentBudgetExpenses: (id: string) => Array<ExpenseType>
-}
-
 const ViewExpensesModal: FC<PropsType> = (
     {
         budgetExpense,
@@ -28,7 +18,6 @@ const ViewExpensesModal: FC<PropsType> = (
 
     const expenses = getCurrentBudgetExpenses(budgetExpense.id)
     const cardTitle = budgetExpense.name ? `View expenses for ${budgetExpense.name}` : 'View uncategorized expenses'
-
 
     return (
         <Modal footer={null} title={cardTitle} visible={isModalVisible} width={400}
@@ -63,3 +52,12 @@ const ViewExpensesModal: FC<PropsType> = (
 }
 
 export default ViewExpensesModal
+type PropsType = {
+    deleteExpense: (id: string) => void
+    deleteBudget: (id: string) => void
+    budgetExpense: CurrentBudgetType
+    isModalVisible: boolean
+    handleCancel: () => void
+    setCurrentBudget: (id: string, name: string) => void
+    getCurrentBudgetExpenses: (id: string) => Array<ExpenseType>
+}

@@ -6,10 +6,8 @@ import { AppStateType } from '../../redux/redux-store'
 import React from 'react'
 
 const HeaderContainer = ({ logout, ...props }: PropsFromRedux) => {
-    const handleLogout = () => logout()
-
     return (
-        <Header {...props} handleLogout={handleLogout}/>
+        <Header {...props} handleLogout={logout}/>
     )
 }
 
@@ -26,6 +24,6 @@ const mapDispatch = {
 
 const connector = connect(mapState, mapDispatch)
 
-type PropsFromRedux = ConnectedProps<typeof connector>
-
 export default connector(HeaderContainer)
+
+type PropsFromRedux = ConnectedProps<typeof connector>

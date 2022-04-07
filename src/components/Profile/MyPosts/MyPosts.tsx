@@ -33,8 +33,6 @@ const MyPosts: FC<PropsType> = ({ addPost, deletePost, likePost, posts }) => {
     )
 }
 
-type InputNames = keyof PostType
-
 const PostForm: FC<InjectedFormProps<PostType>> = ({ handleSubmit }) => {
     return (
         <form onSubmit={handleSubmit}>
@@ -48,11 +46,13 @@ const PostForm: FC<InjectedFormProps<PostType>> = ({ handleSubmit }) => {
 
 const PostReduxForm = reduxForm<PostType>({ form: 'postForm' })(PostForm)
 
+export default MyPosts
+
+type InputNames = keyof PostType
+
 type PropsType = {
     addPost: (post: string) => void
     deletePost: (id: number) => void
     likePost: (id: number) => void
     posts: Array<PostType>
 }
-
-export default MyPosts

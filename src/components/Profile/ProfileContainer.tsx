@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { FC, memo, useEffect } from 'react'
 import Profile from './Profile'
 import { connect, ConnectedProps } from 'react-redux'
 import {
@@ -24,27 +24,7 @@ import { AppStateType } from '../../redux/redux-store'
 import { ProfileType } from '../../types/types'
 import withAuthRedirect from '../../hoc/withAuthRedirect'
 
-type TParams = {
-    userId: string | undefined
-}
-
-type OwnProps = {
-    saveProfile: (formData: ProfileType) => void
-    saveProfileResult: boolean
-    profile: ProfileType
-    userId: number | null
-    isOwner: boolean
-    status: string
-    updateUserStatus: (status: string) => void
-    statusChangeResult: boolean
-    updateUserAvatar: (avatar: File) => void
-    isFetchingAvatar: boolean
-    setEditMode: () => void
-    error: string
-    isAuth: boolean
-}
-
-const ProfileContainer = (props: PropsFromRedux & RouteComponentProps<TParams> & OwnProps) => {
+const ProfileContainer: FC<PropsFromRedux & RouteComponentProps<TParams> & PropsType> = (props) => {
     const {
         getUserProfile,
         getUserStatus,
@@ -91,7 +71,28 @@ const MapDispatchToProps = {
 }
 
 const connector = connect(mapStateToProps, MapDispatchToProps)
+const ProfileContainerMemorized = memo(ProfileContainer)
+
+export default compose<FC>(connector, withRouter, withAuthRedirect)(ProfileContainerMemorized)
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-export default compose<FC>(connector, withRouter, withAuthRedirect)(ProfileContainer)
+type TParams = {
+    userId: string | undefined
+}
+
+export type PropsType = {
+    saveProfile: (formData: ProfileType) => void
+    saveProfileResult: boolean
+    profile: ProfileType
+    userId: number | null
+    isOwner: boolean
+    status: string
+    updateUserStatus: (status: string) => void
+    statusChangeResult: boolean
+    updateUserAvatar: (avatar: File) => void
+    isFetchingAvatar: boolean
+    setEditMode: () => void
+    error: string
+    isAuth: boolean
+}

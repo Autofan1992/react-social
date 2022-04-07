@@ -1,19 +1,10 @@
 import { Button, Card, Progress, Space, Typography } from 'antd'
 import { currencyFormatter } from '../../redux/utilities/currencyFormatter'
+import { FC } from 'react'
 
 const { Paragraph } = Typography
 
-type PropsType = {
-    name: string
-    id: string
-    max: number
-    expensesPercent: number
-    amount: number
-    showViewExpensesModal: (id: string, name: string) => any
-    showAddExpensesModal: (id: string, name: string) => any
-}
-
-const BudgetCard = (
+const BudgetCard: FC<PropsType> = (
     {
         name,
         expensesPercent,
@@ -22,7 +13,7 @@ const BudgetCard = (
         max,
         showAddExpensesModal,
         showViewExpensesModal,
-    }: PropsType) => {
+    }) => {
 
     let fillColor = 'blue'
     if (expensesPercent > 50) fillColor = 'orange'
@@ -41,3 +32,13 @@ const BudgetCard = (
 }
 
 export default BudgetCard
+
+type PropsType = {
+    name: string
+    id: string
+    max: number
+    expensesPercent: number
+    amount: number
+    showViewExpensesModal: (id: string, name: string) => any
+    showAddExpensesModal: (id: string, name: string) => any
+}
