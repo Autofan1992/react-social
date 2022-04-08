@@ -1,6 +1,6 @@
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { BudgetType, CurrentBudgetType, ExpenseType } from '../../types/types'
-import { createField, Input } from '../common/FormControls/FormControls'
+import { createField, ReduxInput } from '../common/FormControls/FormControls'
 import { maxLength, minLength, requiredField } from '../../redux/utilities/validators/validators'
 import { Button, Modal } from 'antd'
 import { UNCATEGORIZED_BUDGET_ID } from '../../redux/reducers/budgets-reducer'
@@ -26,13 +26,14 @@ const AddExpenseForm: FC<InjectedFormProps<ExpenseType, PropsType> & PropsType> 
                onCancel={handleCancel}>
             <form onSubmit={handleSubmit}>
                 <div className="input-block">
-                    {createField<InputNames>('Type in expense description', 'description', [requiredField, minLength2, maxLength500], Input)}
-                    {createField<InputNames>('Expense amount', 'amount', [requiredField], Input,
+                    {createField<InputNames>('Type in expense description', 'description', [requiredField, minLength2, maxLength500], ReduxInput)}
+                    {createField<InputNames>('Expense amount', 'amount', [requiredField], ReduxInput,
                         {
                             type: 'number',
                             min: 0,
-                            step: 1
-                        }, (value) => +value)}
+                            step: 1,
+                            parse: (value: number) => +value
+                        })}
 
                     <Field name="budgetId" component="select">
                         <option

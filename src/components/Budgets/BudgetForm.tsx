@@ -1,6 +1,6 @@
 import { InjectedFormProps, reduxForm } from 'redux-form'
 import { BudgetType } from '../../types/types'
-import { createField, Input } from '../common/FormControls/FormControls'
+import { createField, ReduxInput } from '../common/FormControls/FormControls'
 import { maxLength, minLength, requiredField } from '../../redux/utilities/validators/validators'
 import { Button, Modal } from 'antd'
 import { FC } from 'react'
@@ -19,13 +19,14 @@ const AddBudgetForm: FC<InjectedFormProps<BudgetType, PropsType> & PropsType> = 
         <Modal footer={null} title="Basic Modal" visible={isModalVisible} onCancel={handleCancel}>
             <form onSubmit={handleSubmit}>
                 <div className="input-block">
-                    {createField<InputNames>('Type in budget title', 'name', [requiredField, minLength2, maxLength500], Input)}
-                    {createField<InputNames>('Max budget', 'max', [requiredField], Input,
+                    {createField<InputNames>('Type in budget title', 'name', [requiredField, minLength2, maxLength500], ReduxInput)}
+                    {createField<InputNames>('Max budget', 'max', [requiredField], ReduxInput,
                         {
                             type: 'number',
                             min: 0,
-                            step: 1
-                        }, (value) => +value)}
+                            step: 1,
+                            parse: (value: number) => +value
+                        })}
                 </div>
                 <Button type="primary" htmlType="submit">Add budget</Button>
             </form>

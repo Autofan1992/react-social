@@ -1,20 +1,11 @@
 import styles from './Users.module.scss'
-import Preloader from '../common/preloader/Preloader'
 import User from './User'
 import Paginator from '../common/Paginator/Paginator'
-import { UserType } from '../../types/types'
+import { SearchRequestType, UserType } from '../../types/types'
 import React, { FC } from 'react'
-
-type PropsType = {
-    users: Array<UserType>
-    isFetching: boolean
-    toggleFollowing: (userId: number, followed: boolean) => void
-    followingInProgress: Array<number>
-    onPageChanged: (pageNumber: number, pageSize: number) => void
-    currentPage: number
-    pageSize: number
-    totalUsersCount: number
-}
+import SearchReduxForm from '../common/Search/SearchForm'
+import { debounce } from 'lodash'
+import { Skeleton } from 'antd'
 
 const Users: FC<PropsType> = (
     {
@@ -25,26 +16,49 @@ const Users: FC<PropsType> = (
         onPageChanged,
         currentPage,
         pageSize,
-        totalUsersCount
+        totalUsersCount,
+        searchUsers
     }) => {
+
+    const handleSearch = debounce((values: SearchRequestType) => {
+        searchUsers(values)
+    }, 500)
 
     return (
         <div className={styles.usersList}>
-            {isFetching
-                ? <Preloader/>
-                : users.map(u =>
-                    <User key={u.id} user={u} toggleFollowing={toggleFollowing}
-                          followingInProgress={followingInProgress}/>
-                )
-            }
+            <SearchReduxForm onSubmit={handleSearch} placeholder={'Type in user name'}/>
+            <Skeleton active loading={isFetching}>
+                {users.map(u =>
+                    <User
+                        key={u.id}
+                        user={u}
+                        toggleFollowing={toggleFollowing}
+                        followingInProgress={followingInProgress}
+                    />
+                )}
+            </Skeleton>
+            {!isFetching && !users.length && <div>Users not found</div>}
             <Paginator
                 onPageChanged={onPageChanged}
+                totalItemsCount={totalUsersCount}
                 currentPage={currentPage}
                 pageSize={pageSize}
-                totalItemsCount={totalUsersCount}
+                disabled={isFetching}
             />
         </div>
     )
 }
 
 export default Users
+
+type PropsType = {
+    users: Array<UserType>
+    isFetching: boolean
+    toggleFollowing: (userId: number, followed: boolean) => void
+    searchUsers: (name: SearchRequestType) => void
+    followingInProgress: Array<number>
+    onPageChanged: (pageNumber: number, pageSize: number) => void
+    currentPage: number
+    pageSize: number
+    totalUsersCount: number
+}

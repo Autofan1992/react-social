@@ -1,23 +1,12 @@
 import styles from './ProfileInfo.module.scss'
-import Preloader from '../../common/preloader/Preloader'
+import Preloader from '../../common/Preloader/Preloader'
 import profileThumbnailBig from '../../../images/profile-thumbnail-big.jpg'
 import ProfileStatus from './ProfileStatus'
 import ProfileAvatar from './ProfileAvatar'
 import MyPostsContainer from '../MyPosts/MyPostsContainer'
 import { ProfileType } from '../../../types/types'
 import { FC } from 'react'
-
-type PropsType = {
-    profile: ProfileType
-    userId: number | null
-    isOwner: boolean
-    status: string
-    updateUserStatus: (status: string) => void
-    statusChangeResult: boolean
-    updateUserAvatar: (avatar: File) => void
-    isFetchingAvatar: boolean
-    setEditMode: () => void
-}
+import avatar from '../../../images/user.svg'
 
 const ProfileInfo: FC<PropsType> = (
     {
@@ -48,7 +37,7 @@ const ProfileInfo: FC<PropsType> = (
                     <div className={styles.topInfo}>
                         <ProfileAvatar
                             isOwner={isOwner}
-                            avatar={profile.photos.large}
+                            avatar={(profile.photos.large ?? profile.photos.small) || avatar}
                             savePhoto={updateUserAvatar}
                             isFetchingAvatar={isFetchingAvatar}
                         />
@@ -88,6 +77,18 @@ const ProfileInfo: FC<PropsType> = (
             <MyPostsContainer/>
         </>
     )
+}
+
+type PropsType = {
+    profile: ProfileType
+    userId: number | null
+    isOwner: boolean
+    status: string
+    updateUserStatus: (status: string) => void
+    statusChangeResult: boolean
+    updateUserAvatar: (avatar: File) => void
+    isFetchingAvatar: boolean
+    setEditMode: () => void
 }
 
 export default ProfileInfo

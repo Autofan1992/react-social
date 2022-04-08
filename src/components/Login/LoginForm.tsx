@@ -1,5 +1,5 @@
 import { InjectedFormProps, reduxForm } from 'redux-form'
-import { createField, Input } from '../common/FormControls/FormControls'
+import { createField, ReduxInput } from '../common/FormControls/FormControls'
 import { requiredField } from '../../redux/utilities/validators/validators'
 import { ProfileType } from '../../types/types'
 import { FC } from 'react'
@@ -15,14 +15,14 @@ const LoginForm: FC<InjectedFormProps<ProfileType, PropsType> & PropsType> = ({ 
         <form onSubmit={handleSubmit}>
             <div className="inputBlocks my-3">
                 <div className="input-block">
-                    {createField<InputNamesKeys>('Email', 'email', [requiredField], Input, { type: 'email' })}
+                    {createField<InputNamesKeys>('Email', 'email', [requiredField], ReduxInput, { type: 'email' })}
                 </div>
                 <div className="input-block my-3">
-                    {createField<InputNamesKeys>('Password', 'password', [requiredField], Input, { type: 'password' })}
+                    {createField<InputNamesKeys>('Password', 'password', [requiredField], ReduxInput, { type: 'password' })}
                 </div>
                 <div className="input-block form-check">
                     <label className="form-check-label">
-                        {createField<InputNamesKeys>(undefined, 'rememberMe', [], Input, { type: 'checkbox' })}
+                        {createField<InputNamesKeys>(undefined, 'rememberMe', [], ReduxInput, { type: 'checkbox' })}
                         <p className="mb-0">Запомнить меня</p>
                     </label>
                 </div>
@@ -34,7 +34,7 @@ const LoginForm: FC<InjectedFormProps<ProfileType, PropsType> & PropsType> = ({ 
                 {captcha &&
                     <div className="input-block">
                         <div className="my-3"><img src={captcha} alt=""/></div>
-                        {createField<InputNamesKeys>('Type symbols shown on image', 'captcha', [requiredField], Input)}
+                        {createField<InputNamesKeys>('Type symbols shown on image', 'captcha', [requiredField], ReduxInput)}
                     </div>
                 }
             </div>

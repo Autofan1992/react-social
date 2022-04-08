@@ -1,12 +1,13 @@
 import { connect, ConnectedProps } from 'react-redux'
-import {
-    followUserToggle, requestUsers,
-} from '../../redux/reducers/users-reducer'
+import { followUserToggle, requestUsers, searchUsers, } from '../../redux/reducers/users-reducer'
 import Users from './Users'
 import {
     getCurrentPage,
     getFollowingInProgress,
-    getIsFetching, getPageSize, getTotalUsersCount, getUsers
+    getIsFetching,
+    getPageSize,
+    getTotalUsersCount,
+    getUsers
 } from '../../redux/selectors/users-selectors'
 import { FC, useEffect } from 'react'
 import { AppStateType } from '../../redux/redux-store'
@@ -20,33 +21,25 @@ const UsersContainer: FC<PropsFromRedux> = (
         followingInProgress,
         currentPage,
         pageSize,
-        totalUsersCount
+        totalUsersCount,
+        searchUsers
     }) => {
 
     useEffect(() => {
-        if (!users.length) {
             requestUsers(currentPage, pageSize)
-        }
-    }, [users.length, requestUsers, currentPage, pageSize])
-
-    const toggleFollowingUser = (userId: number, followed: boolean) => {
-        followUserToggle(userId, followed)
-    }
-
-    const onPageChanged = (pageNumber: number, pageSize: number) => {
-        requestUsers(pageNumber, pageSize)
-    }
+    }, [requestUsers, currentPage, pageSize])
 
     return (
         <Users
             isFetching={isFetching}
-            toggleFollowing={toggleFollowingUser}
+            toggleFollowing={followUserToggle}
             users={users}
             followingInProgress={followingInProgress}
             currentPage={currentPage}
             pageSize={pageSize}
             totalUsersCount={totalUsersCount}
-            onPageChanged={onPageChanged}
+            onPageChanged={requestUsers}
+            searchUsers={searchUsers}
         />
     )
 }
@@ -64,7 +57,8 @@ const mapStateToProps = (state: AppStateType) => {
 
 const mapDispatchToProps = {
     followUserToggle,
-    requestUsers
+    requestUsers,
+    searchUsers
 }
 
 const connector = connect(mapStateToProps, mapDispatchToProps)

@@ -1,6 +1,6 @@
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { TodoType } from '../../types/types'
-import { Input } from '../common/FormControls/FormControls'
+import { ReduxInput } from '../common/FormControls/FormControls'
 import { minLength, requiredField } from '../../redux/utilities/validators/validators'
 import { FC } from 'react'
 
@@ -13,7 +13,7 @@ const TodoForm: FC<InjectedFormProps<TodoType>> = props => {
                 <div className="col">
                     <Field
                         name={'text'}
-                        component={Input}
+                        component={ReduxInput}
                         placeholder="Введите заметку"
                         validate={[requiredField, minLength2]}
                     />

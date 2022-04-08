@@ -1,4 +1,4 @@
-import { UserType } from '../../types/types'
+import { SearchRequestType, UserType } from '../../types/types'
 import { ThunkAction } from 'redux-thunk'
 import { AppStateType, InferActionTypes } from '../redux-store'
 import { userAPI } from '../../api/users-api'
@@ -91,6 +91,14 @@ export const requestUsers = (pageNumber: number, pageSize: number): ThunkType =>
     dispatch(actions.setTotalUsersCount(data.totalCount))
     dispatch(actions.setCurrentPage(pageNumber))
 
+    dispatch(actions.toggleIsFetching(false))
+}
+
+export const searchUsers = ({ text: name, friend }: SearchRequestType): ThunkType => async dispatch => {
+    dispatch(actions.toggleIsFetching(true))
+
+    const data = await userAPI.searchUsers(name, friend)
+    dispatch(actions.setUsers(data.items))
     dispatch(actions.toggleIsFetching(false))
 }
 

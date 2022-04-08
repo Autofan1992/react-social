@@ -1,11 +1,10 @@
-import styles from './FormControls.module.scss'
 import { Field, WrappedFieldMetaProps, WrappedFieldProps } from 'redux-form'
 import { FieldValidatorType } from '../../../redux/utilities/validators/validators'
 import { FC } from 'react'
+import { Input } from 'antd'
+import styles from './FormControls.module.scss'
 
-type FormControlsPropsType = {
-    meta: WrappedFieldMetaProps
-}
+const { TextArea } = Input
 
 const FormControl: FC<FormControlsPropsType> = ({ meta, children }) => {
     const hasError = meta.touched && meta.error
@@ -20,18 +19,18 @@ const FormControl: FC<FormControlsPropsType> = ({ meta, children }) => {
     )
 }
 
-export const Textarea: FC<WrappedFieldProps> = ({ input, ...props }) => {
+export const ReduxTextarea: FC<WrappedFieldProps> = ({ input, meta, ...props }) => {
     return (
-        <FormControl {...props}>
-            <textarea {...input} {...props} />
+        <FormControl meta={meta}>
+            <TextArea {...input} {...props} />
         </FormControl>
     )
 }
 
-export const Input: FC<WrappedFieldProps> = ({ input, ...props }) => {
+export const ReduxInput: FC<WrappedFieldProps> = ({ input, meta, ...props }) => {
     return (
-        <FormControl {...props}>
-            <input {...input} {...props} />
+        <FormControl meta={meta}>
+            <Input {...input} {...props} />
         </FormControl>
     )
 }
@@ -39,7 +38,7 @@ export const Input: FC<WrappedFieldProps> = ({ input, ...props }) => {
 export const CheckBox: FC<WrappedFieldProps> = ({ input, ...props }) => {
     return (
         <FormControl {...props}>
-            <input {...input} {...props} checked={input.value}/>
+            <Input {...input} {...props} checked={input.value}/>
         </FormControl>
     )
 }
@@ -50,11 +49,13 @@ export const createField = <KeysType extends string>(
     validators: Array<FieldValidatorType>,
     component: string | FC<WrappedFieldProps>,
     props = {},
-    parse?: (value: number) => number,
     text = '') => (
-
-    <div>
+    <>
         <Field placeholder={placeholder} name={name} validate={validators} component={component} {...props} />
         {text}
-    </div>
+    </>
 )
+
+type FormControlsPropsType = {
+    meta: WrappedFieldMetaProps
+}

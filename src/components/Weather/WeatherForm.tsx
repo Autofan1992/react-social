@@ -1,5 +1,5 @@
 import { InjectedFormProps, reduxForm } from 'redux-form'
-import { createField, Input } from '../common/FormControls/FormControls'
+import { createField, ReduxInput } from '../common/FormControls/FormControls'
 import { minLength, requiredField } from '../../redux/utilities/validators/validators'
 import { FC } from 'react'
 
@@ -16,7 +16,7 @@ const WeatherForm: FC<InjectedFormProps<PropsType>> = ({ handleSubmit, error }) 
         <form onSubmit={handleSubmit}>
             <div className="row">
                 <div className="col">
-                    {createField('Type city name', 'city', [requiredField, minLength2], Input)}
+                    {createField('Type city name', 'city', [requiredField, minLength2], ReduxInput)}
                 </div>
                 <div className="col">
                     <button className="btn btn-primary">Search</button>

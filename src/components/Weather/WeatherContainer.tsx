@@ -1,7 +1,7 @@
 import { connect, ConnectedProps } from 'react-redux'
 import Weather from './Weather'
 import { getWeatherData } from '../../redux/reducers/weather-reducer'
-import Preloader from '../common/preloader/Preloader'
+import Preloader from '../common/Preloader/Preloader'
 import styles from './Weather.module.scss'
 import { getIsFetching, getWeatherInfo } from '../../redux/selectors/weather-selectors'
 import ReduxWeatherForm from './WeatherForm'

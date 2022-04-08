@@ -101,3 +101,8 @@ export type WeatherDataType = {
         speed: number
     }
 }
+
+export type SearchRequestType = {
+    text: string
+    friend: boolean
+}

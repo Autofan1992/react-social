@@ -4,19 +4,13 @@ import userPhoto from '../../images/user.svg'
 import { UserType } from '../../types/types'
 import { FC } from 'react'
 
-type PropsType = {
-    user: UserType
-    toggleFollowing: (userID: number, followed: boolean) => void
-    followingInProgress: Array<number>
-}
-
 const User: FC<PropsType> = ({ user, toggleFollowing, followingInProgress }) => {
     return (
         <div key={user.id} className={styles.userBlock}>
             <div className={styles.userLeft}>
                 <div>
                     <NavLink to={'/profile/' + user.id} className={styles.profileAvatar}>
-                        <img src={user.photos.small ??  userPhoto} alt=""/>
+                        <img src={user.photos.small ?? userPhoto} alt=""/>
                     </NavLink>
                 </div>
                 <div>
@@ -41,3 +35,9 @@ const User: FC<PropsType> = ({ user, toggleFollowing, followingInProgress }) => 
 }
 
 export default User
+
+type PropsType = {
+    user: UserType
+    toggleFollowing: (userID: number, followed: boolean) => void
+    followingInProgress: Array<number>
+}

@@ -1,5 +1,5 @@
 import styles from './ProfileInfo.module.scss'
-import Preloader from '../../common/preloader/Preloader'
+import Preloader from '../../common/Preloader/Preloader'
 import { ChangeEvent, FC } from 'react'
 import userPhoto from '../../../images/user.svg'
 

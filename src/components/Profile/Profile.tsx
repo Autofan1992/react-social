@@ -2,7 +2,7 @@ import ProfileInfo from './ProfileInfo/ProfileInfo'
 import ProfileForm from './ProfileForm/ProfileForm'
 import { useState } from 'react'
 import { ProfileType } from '../../types/types'
-import Preloader from '../common/preloader/Preloader'
+import Preloader from '../common/Preloader/Preloader'
 import { PropsType } from './ProfileContainer'
 
 const Profile = ({ saveProfile, saveProfileResult, isAuth, ...props }: PropsType) => {

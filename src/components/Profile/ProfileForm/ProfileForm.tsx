@@ -1,6 +1,6 @@
 import styles from './ProfileForm.module.scss'
 import profileThumbnailBig from '../../../images/profile-thumbnail-big.jpg'
-import { CheckBox, createField, Input, Textarea } from '../../common/FormControls/FormControls'
+import { createField, ReduxInput, ReduxTextarea } from '../../common/FormControls/FormControls'
 import { requiredField } from '../../../redux/utilities/validators/validators'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { ProfileType } from '../../../types/types'
@@ -27,11 +27,11 @@ const ProfileForm: FC<InjectedFormProps<ProfileType, PropsType> & PropsType> = (
                                 <p>
                                     <span className="fw-bold">Full name</span>
                                 </p>
-                                {createField<InputNames>('Type your full name', 'fullName', [requiredField], Input, profile.fullName)}
+                                {createField<InputNames>('Type your full name', 'fullName', [requiredField], ReduxInput, profile.fullName)}
                             </div>
                             <div className={styles.fieldBlock}>
                                 <p><b>About me</b></p>
-                                {createField<InputNames>('Write about yourself', 'aboutMe', [], Textarea, profile.aboutMe)}
+                                {createField<InputNames>('Write about yourself', 'aboutMe', [], ReduxTextarea, profile.aboutMe)}
                             </div>
                         </div>
                         <div className={styles.infoBlock}>
@@ -39,13 +39,13 @@ const ProfileForm: FC<InjectedFormProps<ProfileType, PropsType> & PropsType> = (
                                 <p style={{ marginRight: '.5rem' }}>
                                     <span className="fw-bold">Looking for a job</span>
                                 </p>
-                                {createField<InputNames>('', 'lookingForAJob', [], CheckBox, { type: 'checkbox' })}
+                                {createField<InputNames>('', 'lookingForAJob', [], ReduxInput, { type: 'checkbox' })}
                             </div>
                             <div className={styles.fieldBlock}>
                                 <p>
                                     <span className="fw-bold">My skills</span>
                                 </p>
-                                {createField<InputNames>('Type your skills', 'lookingForAJobDescription', [], Textarea, profile.lookingForAJobDescription)}
+                                {createField<InputNames>('Type your skills', 'lookingForAJobDescription', [], ReduxTextarea, profile.lookingForAJobDescription)}
                             </div>
                         </div>
                     </div>
@@ -58,7 +58,7 @@ const ProfileForm: FC<InjectedFormProps<ProfileType, PropsType> & PropsType> = (
                                     <Field
                                         name={'contacts.' + title}
                                         type={'url'}
-                                        component={Input}
+                                        component={ReduxInput}
                                     />
                                 </div>
                             ))}
