@@ -1,4 +1,47 @@
 import { FC } from 'react'
+import { Button } from 'antd'
+
+const ToDo: FC<PropsType> = (
+    {
+        id,
+        handleComplete,
+        completeToggle,
+        handleDelete,
+        text
+    }) => {
+
+    const labelStyle = {
+        width: '100%',
+        background: '#fff',
+        padding: '15px'
+    }
+
+    return (
+        <label
+            className="ant-list-item"
+            style={labelStyle}
+        >
+            <div className="ant-space-align-center">
+                <input
+                    className="ant-checkbox"
+                    type="checkbox"
+                    name="toDo" id={`${id}`}
+                    onChange={handleComplete}
+                    checked={completeToggle}
+                />
+                {text}
+            </div>
+            <Button
+                danger
+                size={'middle'}
+                onClick={handleDelete}
+                id={`${id}`}>&times;
+            </Button>
+        </label>
+    )
+}
+
+export default ToDo
 
 type PropsType = {
     handleComplete: () => void
@@ -7,25 +50,3 @@ type PropsType = {
     completeToggle: boolean
     handleDelete: () => void
 }
-
-const ToDo: FC<PropsType> = props => {
-    return (
-        <ul className="list-group mb-3">
-            <li className="list-group-item d-flex align-items-center justify-content-between">
-                <div className="toDoItem flex-grow-1 d-flex align-items-center">
-                    <input className="form-check-input" type="checkbox"
-                           name="toDo" id={props.id.toString()}
-                           onChange={props.handleComplete}
-                           checked={props.completeToggle}
-                    />
-                    <label htmlFor={props.id.toString()}
-                           className={`${props.completeToggle} mx-3 form-check-label flex-grow-1`}>{props.text}</label>
-                </div>
-                <button className="btn btn-danger btn-sm" onClick={props.handleDelete}
-                        id={props.id.toString()}>&times;</button>
-            </li>
-        </ul>
-    )
-}
-
-export default ToDo

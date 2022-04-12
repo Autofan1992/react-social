@@ -23,6 +23,7 @@ type ActionTypes = InferActionTypes<typeof actions>
 const todoListReducer = (state = initialState, action: ActionTypes): InitialStateType => {
     switch (action.type) {
         case 'TODOS/ADD_TODO':
+            debugger
             return {
                 ...state,
                 todos: [{ id: state.todos.length, text: action.payload, complete: false }, ...state.todos],
@@ -95,7 +96,7 @@ export const actions = {
     } as const)
 }
 
-export const addTodo = (text: string): ThunkType => async dispatch => {
+export const addTodo = ({ text }: TodoType): ThunkType => async dispatch => {
     dispatch(actions.setNewTodo(text))
     dispatch(reset('todoForm'))
 }

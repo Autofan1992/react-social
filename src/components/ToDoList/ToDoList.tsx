@@ -5,7 +5,7 @@ import TodoReduxForm from './TodoForm'
 import { TodoFilterTypes } from '../../redux/reducers/todoList-reducer'
 
 type PropsType = {
-    addTodo: (text: string) => void
+    addTodo: (text: TodoType) => void
     handleFilter: (filter: TodoFilterTypes) => void
     todos: Array<TodoType>
     updateTodoStatus: (id: number) => void
@@ -35,14 +35,18 @@ const ToDoList: FC<PropsType> = (
         <>
             <TodoReduxForm onSubmit={addTodo}/>
             <hr/>
-            {todos.map(t =>
-                <ToDo
-                    key={t.id} id={t.id} text={t.text}
-                    completeToggle={t.complete}
-                    handleComplete={() => updateTodoStatus(t.id)}
-                    handleDelete={() => deleteTodo(t.id)}
-                />)}
-            <p className="todosLeft">Active todos: {`${activeTodos ?? 'not found'}`}</p>
+            <ul className="ant-list">
+                {todos.map(t =>
+                    <ToDo
+                        key={t.id} id={t.id} text={t.text}
+                        completeToggle={t.complete}
+                        handleComplete={() => updateTodoStatus(t.id)}
+                        handleDelete={() => deleteTodo(t.id)}
+                    />)}
+            </ul>
+            {activeTodos > 0 &&
+                <p className="todosLeft">Active todos: {activeTodos}</p>
+            }
             <div className="filterButtons">
                 <div className="row">
                     <div className="col-auto">
