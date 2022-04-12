@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 import userPhoto from '../../images/user.svg'
 import { UserType } from '../../types/types'
 import { FC } from 'react'
+import { Button } from 'antd'
 
 const User: FC<PropsType> = ({ user, toggleFollowing, followingInProgress }) => {
     return (
@@ -14,13 +15,14 @@ const User: FC<PropsType> = ({ user, toggleFollowing, followingInProgress }) => 
                     </NavLink>
                 </div>
                 <div>
-                    <button
-                        className="btn btn-info"
+                    <Button
+                        type="primary"
+                        size="large"
+                        loading={followingInProgress.some(id => id === user.id)}
                         onClick={() => toggleFollowing(user.id, user.followed)}
-                        disabled={followingInProgress.some(id => id === user.id)}
                     >
-                        {!user.followed ? 'Подписаться' : 'Отписаться'}
-                    </button>
+                        {!user.followed ? 'Follow' : 'Unfollow'}
+                    </Button>
                 </div>
             </div>
             <div className={styles.userRight}>

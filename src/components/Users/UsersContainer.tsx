@@ -9,8 +9,9 @@ import {
     getTotalUsersCount,
     getUsers
 } from '../../redux/selectors/users-selectors'
-import { FC, useEffect } from 'react'
+import { FC, memo, useEffect } from 'react'
 import { AppStateType } from '../../redux/redux-store'
+
 
 const UsersContainer: FC<PropsFromRedux> = (
     {
@@ -26,7 +27,7 @@ const UsersContainer: FC<PropsFromRedux> = (
     }) => {
 
     useEffect(() => {
-            requestUsers(currentPage, pageSize)
+        requestUsers(currentPage, pageSize)
     }, [requestUsers, currentPage, pageSize])
 
     return (
@@ -63,6 +64,8 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps)
 
-type PropsFromRedux = ConnectedProps<typeof connector>
+const MemoizedUserContainer = memo(UsersContainer)
 
-export default connector(UsersContainer)
+export default connector(MemoizedUserContainer)
+
+type PropsFromRedux = ConnectedProps<typeof connector>

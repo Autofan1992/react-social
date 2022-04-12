@@ -1,8 +1,9 @@
 import {createSelector} from 'reselect'
 import { AppStateType } from '../redux-store'
 
-const getVisibilityFilter = (state: AppStateType) => state.todoList.filter
-const getTodos = (state: AppStateType) => state.todoList.todos
+export const getVisibilityFilter = (state: AppStateType) => state.todoList.filter
+export const getTodos = (state: AppStateType) => state.todoList.todos
+export const getToggleAllComplete = (state: AppStateType) => state.todoList.toggleAllComplete
 
 export const getVisibleTodos = createSelector(
     getVisibilityFilter, getTodos,

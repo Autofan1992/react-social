@@ -1,30 +1,47 @@
 import ToDoList from './ToDoList'
 import { connect, ConnectedProps } from 'react-redux'
-import { actions, addTodo } from '../../redux/reducers/todoList-reducer'
+import { actions, addTodo, TodoFilterTypes } from '../../redux/reducers/todoList-reducer'
 import styles from './ToDo.module.scss'
-import { getActiveTodosCount, getCompleteTodosCount, getVisibleTodos } from '../../redux/selectors/todoList-selectors'
+import {
+    getActiveTodosCount,
+    getCompleteTodosCount,
+    getTodos, getToggleAllComplete, getVisibilityFilter,
+    getVisibleTodos
+} from '../../redux/selectors/todoList-selectors'
 import { AppStateType } from '../../redux/redux-store'
-import { FC, MouseEvent } from 'react'
+import { FC } from 'react'
 
-const ToDoListContainer: FC<PropsFromRedux> = props => {
-    const handleFilter = (e: MouseEvent<HTMLButtonElement>) => {
-        props.filterTodo(e.currentTarget.value)
+const ToDoListContainer: FC<PropsFromRedux> = (
+    {
+        addTodo,
+        todos,
+        someActiveTodos,
+        someCompleteTodos,
+        filterTodo,
+        deleteAllCompleteTodo,
+        toggleAllTodo,
+        updateTodoStatus,
+        deleteTodo,
+        toggleAllComplete
+    }) => {
+
+    const handleFilter = (filter: TodoFilterTypes) => {
+        filterTodo(filter)
     }
 
     return (
         <div className={styles.ToDoWrapper}>
             <ToDoList
-                addTodo={props.addTodo}
+                addTodo={addTodo}
                 handleFilter={handleFilter}
-                updateTodoStatus={props.updateTodoStatus}
-                toggleAllComplete={props.toggleAllComplete}
-                deleteTodo={props.deleteTodo}
-                toggleAllTodo={props.toggleAllTodo}
-                deleteAllCompleteTodo={props.deleteAllCompleteTodo}
-                todos={props.todos}
-                activeTodos={props.someActiveTodos}
-                completeTodos={props.someCompleteTodos}
-                todosLength={props.todosLength}
+                updateTodoStatus={updateTodoStatus}
+                toggleAllComplete={toggleAllComplete}
+                deleteTodo={deleteTodo}
+                toggleAllTodo={toggleAllTodo}
+                deleteAllCompleteTodo={deleteAllCompleteTodo}
+                todos={todos}
+                activeTodos={someActiveTodos}
+                completeTodos={someCompleteTodos}
             />
         </div>
     )
@@ -33,14 +50,12 @@ const ToDoListContainer: FC<PropsFromRedux> = props => {
 
 const mapStateToProps = (state: AppStateType) => {
     return {
-        todoList: state.todoList,
-        newText: state.todoList.newText,
+        todoList: getTodos(state),
         todos: getVisibleTodos(state),
-        filter: state.todoList.filter,
+        filter: getVisibilityFilter(state),
         someActiveTodos: getActiveTodosCount(state),
         someCompleteTodos: getCompleteTodosCount(state),
-        toggleAllComplete: state.todoList.toggleAllComplete,
-        todosLength: state.todoList.todos.length
+        toggleAllComplete: getToggleAllComplete(state),
     }
 }
 

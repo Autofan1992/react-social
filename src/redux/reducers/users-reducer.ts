@@ -19,7 +19,7 @@ const initialState = {
     followingInProgress: [] as Array<number> // array of users id's
 }
 
-type InitialStateType = typeof initialState
+export type InitialStateType = typeof initialState
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
 type ActionTypes = InferActionTypes<typeof actions>
 
@@ -103,7 +103,7 @@ export const searchUsers = ({ text: name, friend }: SearchRequestType): ThunkTyp
 }
 
 export const followUserToggle = (userId: number, followed: boolean): ThunkType => async dispatch => {
-    const followMethod = !followed ? userAPI.followUserRequest : userAPI.unfollowUserRequest
+    const followMethod = followed ? userAPI.unfollowUserRequest : userAPI.followUserRequest
     dispatch(actions.toggleFollowingProgress(true, userId))
 
     const data = await followMethod(userId)

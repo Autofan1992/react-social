@@ -8,10 +8,11 @@ type TodoType = {
     complete: boolean
 }
 
+export type TodoFilterTypes = 'ALL_TODOS' | 'COMPLETE_TODOS' | 'ACTIVE_TODOS'
+
 const initialState = {
-    newText: '' as string,
     todos: [] as Array<TodoType>,
-    filter: 'all' as string,
+    filter: 'ALL_TODOS' as TodoFilterTypes,
     toggleAllComplete: true as boolean
 }
 
@@ -24,7 +25,6 @@ const todoListReducer = (state = initialState, action: ActionTypes): InitialStat
         case 'TODOS/ADD_TODO':
             return {
                 ...state,
-                newText: '',
                 todos: [{ id: state.todos.length, text: action.payload, complete: false }, ...state.todos],
             }
 
@@ -32,7 +32,8 @@ const todoListReducer = (state = initialState, action: ActionTypes): InitialStat
             return {
                 ...state,
                 todos: state.todos.map(todo => todo.id === action.payload
-                    ? { ...todo, complete: !todo.complete } : todo)
+                    ? { ...todo, complete: !todo.complete }
+                    : todo)
             }
 
         case 'TODOS/FILTER_TODO':
@@ -64,7 +65,6 @@ const todoListReducer = (state = initialState, action: ActionTypes): InitialStat
                     }
                 })
             }
-
         default:
             return state
     }
@@ -89,7 +89,7 @@ export const actions = {
         type: 'TODOS/UPDATE_TODO_STATUS',
         payload: id
     } as const),
-    filterTodo: (filter: string) => ({
+    filterTodo: (filter: TodoFilterTypes) => ({
         type: 'TODOS/FILTER_TODO',
         payload: filter
     } as const)
