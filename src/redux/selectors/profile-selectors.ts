@@ -16,8 +16,8 @@ export const getStatusChangeResult = (state: AppStateType) => {
     return state.profilePage.statusChangeResult
 }
 
-export const getIsFetchingAvatar = (state: AppStateType) => {
-    return state.profilePage.isFetchingAvatar
+export const getIsFetching = (state: AppStateType) => {
+    return state.profilePage.isFetching
 }
 
 export const getSaveProfileResult = (state: AppStateType) => {

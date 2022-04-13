@@ -5,34 +5,31 @@ import {
     getUserProfile,
     getUserStatus,
     saveProfile,
-    updateUserAvatar,
+    updateProfileAvatar,
     updateUserStatus
 } from '../../redux/reducers/profile-reducer'
 import { withRouter } from 'react-router'
 import { compose } from 'redux'
 import { getAuthUserId, getIsAuth } from '../../redux/selectors/auth-selectors'
-import {
-    getAvatarChangeResult,
-    getIsFetchingAvatar,
-    getProfile,
-    getSaveProfileResult,
-    getStatus,
-    getStatusChangeResult
-} from '../../redux/selectors/profile-selectors'
+import { getIsFetching, getProfile, getStatus } from '../../redux/selectors/profile-selectors'
 import { RouteComponentProps } from 'react-router-dom'
 import { AppStateType } from '../../redux/redux-store'
 import { ProfileType } from '../../types/types'
 import withAuthRedirect from '../../hoc/withAuthRedirect'
+import { getRequestSuccess } from '../../redux/selectors/app-selectors'
+import RequestResultModal from '../common/RequestResultModal/RequestResultModal'
 
 const ProfileContainer: FC<PropsFromRedux & RouteComponentProps<TParams> & PropsType> = (props) => {
     const {
         getUserProfile,
         getUserStatus,
         authorisedUserId,
-        isAuth
+        isAuth,
+        match
     } = props
 
-    const urlUserId = props.match.params.userId?.length ? +props.match.params.userId : undefined
+    const urlUserId = match.params.userId?.length ? +match.params.userId : undefined
+    const isOwner = !match.params.userId ? isAuth : urlUserId === authorisedUserId
 
     useEffect(() => {
         const userId = urlUserId ?? authorisedUserId
@@ -40,14 +37,20 @@ const ProfileContainer: FC<PropsFromRedux & RouteComponentProps<TParams> & Props
             getUserProfile(userId)
             getUserStatus(userId)
         }
-    }, [props.match.params, urlUserId, authorisedUserId, getUserProfile, getUserStatus])
-
-    const isOwner = !props.match.params.userId ? isAuth : urlUserId === authorisedUserId
+    }, [match.params, urlUserId, authorisedUserId, getUserProfile, getUserStatus])
 
     return (
-        <div className="profileBlock">
-            <Profile {...props} userId={urlUserId ?? authorisedUserId} isOwner={isOwner}/>
-        </div>
+        <>
+            <RequestResultModal
+                requestResult={props.requestSuccess}
+                successText="Profile saved successfully"
+                errorText="Something went wrong"
+                visible={props.requestSuccess !== undefined && true}
+            />
+            <div className="profileBlock">
+                <Profile {...props} userId={urlUserId ?? authorisedUserId} isOwner={isOwner}/>
+            </div>
+        </>
     )
 }
 
@@ -56,17 +59,15 @@ const mapStateToProps = (state: AppStateType) => ({
     isAuth: getIsAuth(state),
     profile: getProfile(state),
     status: getStatus(state),
-    avatarChangeResult: getAvatarChangeResult(state),
-    statusChangeResult: getStatusChangeResult(state),
-    saveProfileResult: getSaveProfileResult(state),
-    isFetchingAvatar: getIsFetchingAvatar(state)
+    requestSuccess: getRequestSuccess(state),
+    isFetching: getIsFetching(state)
 })
 
 const MapDispatchToProps = {
     getUserProfile,
     getUserStatus,
     updateUserStatus,
-    updateUserAvatar,
+    updateProfileAvatar,
     saveProfile
 }
 
@@ -82,17 +83,17 @@ type TParams = {
 }
 
 export type PropsType = {
-    saveProfile: (formData: ProfileType) => void
-    saveProfileResult: boolean
+    saveProfile?: (formData: ProfileType) => void
     profile: ProfileType
     userId: number | null
     isOwner: boolean
     status: string
     updateUserStatus: (status: string) => void
     statusChangeResult: boolean
-    updateUserAvatar: (avatar: File) => void
-    isFetchingAvatar: boolean
-    setEditMode: () => void
+    updateProfileAvatar: (avatar: File) => void
+    isFetching: boolean
+    toggleEditMode: () => void
     error: string
-    isAuth: boolean
+    isAuth?: boolean
+    requestSuccess: boolean
 }

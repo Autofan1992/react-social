@@ -1,8 +1,8 @@
-import profileReducer, { actions } from './profile-reducer'
+import profileReducer, { profileActions } from './profile-reducer'
 
 it('should add new post', function () {
     // test data
-    let action = actions.setNewPost('it-senior')
+    let action = profileActions.setNewPost('it-senior')
     let initialState = {
         posts: [],
         profile: null,
@@ -22,7 +22,7 @@ it('should add new post', function () {
 
 it('should add like', function () {
     // test data
-    let action = actions.likePost(0)
+    let action = profileActions.likePost(0)
     let initialState = {
         posts: [
             { id: 0, post: 'foo', likesCount: 0 }
@@ -44,7 +44,7 @@ it('should add like', function () {
 
 it('should delete post', function () {
     // test data
-    let action = actions.deletePost(0)
+    let action = profileActions.deletePost(0)
     let initialState = {
         posts: [
             { id: 0, post: 'foo', likesCount: 0 }

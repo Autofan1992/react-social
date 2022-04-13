@@ -1,4 +1,4 @@
-import { actions, addPost } from '../../../redux/reducers/profile-reducer'
+import { profileActions, addPost } from '../../../redux/reducers/profile-reducer'
 import MyPosts from './MyPosts'
 import { connect } from 'react-redux'
 import { getPostId, getPosts } from '../../../redux/selectors/profile-selectors'
@@ -11,4 +11,4 @@ const mapStateToProps = (state: AppStateType) => {
     }
 }
 
-export default connect(mapStateToProps, { addPost, deletePost: actions.deletePost, likePost: actions.likePost })(MyPosts)
+export default connect(mapStateToProps, { addPost, deletePost: profileActions.deletePost, likePost: profileActions.likePost })(MyPosts)

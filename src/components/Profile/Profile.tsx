@@ -1,29 +1,29 @@
 import ProfileInfo from './ProfileInfo/ProfileInfo'
 import ProfileForm from './ProfileForm/ProfileForm'
-import { useState } from 'react'
-import { ProfileType } from '../../types/types'
+import { FC, useState } from 'react'
 import Preloader from '../common/Preloader/Preloader'
 import { PropsType } from './ProfileContainer'
 
-const Profile = ({ saveProfile, saveProfileResult, isAuth, ...props }: PropsType) => {
+const Profile: FC<PropsType> = ({ saveProfile, isAuth, ...props }) => {
     const [editMode, setEditMode] = useState(false)
+
+    if (!isAuth) return <Preloader/>
 
     const toggleEditMode = () => {
         setEditMode(!editMode)
     }
 
-    const handleProfileUpdate = (formData: ProfileType) => {
-        saveProfile(formData)
-        saveProfileResult && toggleEditMode()
-    }
-
-    if (!isAuth) return <Preloader/>
-
     return (
         <>
             {editMode ?
-                <ProfileForm {...props} initialValues={props.profile} onSubmit={handleProfileUpdate}/> :
-                <ProfileInfo {...props} setEditMode={toggleEditMode}/>}
+                <ProfileForm
+                    {...props}
+                    toggleEditMode={toggleEditMode}
+                    initialValues={props.profile}
+                    onSubmit={saveProfile}/> :
+                <ProfileInfo
+                    {...props}
+                    toggleEditMode={toggleEditMode}/>}
         </>
     )
 }

@@ -4,9 +4,9 @@ import profileThumbnailBig from '../../../images/profile-thumbnail-big.jpg'
 import ProfileStatus from './ProfileStatus'
 import ProfileAvatar from './ProfileAvatar'
 import MyPostsContainer from '../MyPosts/MyPostsContainer'
-import { ProfileType } from '../../../types/types'
 import { FC } from 'react'
 import avatar from '../../../images/user.svg'
+import { PropsType } from '../ProfileContainer'
 
 const ProfileInfo: FC<PropsType> = (
     {
@@ -15,9 +15,9 @@ const ProfileInfo: FC<PropsType> = (
         status,
         updateUserStatus,
         statusChangeResult,
-        updateUserAvatar,
-        isFetchingAvatar,
-        setEditMode
+        updateProfileAvatar,
+        isFetching,
+        toggleEditMode
     }) => {
 
     if (!profile && isOwner) return <Preloader/>
@@ -31,15 +31,15 @@ const ProfileInfo: FC<PropsType> = (
                 <div className={styles.authorInfo}>
                     {isOwner &&
                         <div className="text-end">
-                            <button onClick={setEditMode} className="btn btn-link">Edit profile</button>
+                            <button onClick={toggleEditMode} className="btn btn-link">Edit profile</button>
                         </div>
                     }
                     <div className={styles.topInfo}>
                         <ProfileAvatar
                             isOwner={isOwner}
                             avatar={(profile.photos.large ?? profile.photos.small) || avatar}
-                            savePhoto={updateUserAvatar}
-                            isFetchingAvatar={isFetchingAvatar}
+                            savePhoto={updateProfileAvatar}
+                            isFetchingAvatar={isFetching}
                         />
                         <div className={styles.infoBlock}>
                             <ProfileStatus
@@ -77,18 +77,6 @@ const ProfileInfo: FC<PropsType> = (
             <MyPostsContainer/>
         </>
     )
-}
-
-type PropsType = {
-    profile: ProfileType
-    userId: number | null
-    isOwner: boolean
-    status: string
-    updateUserStatus: (status: string) => void
-    statusChangeResult: boolean
-    updateUserAvatar: (avatar: File) => void
-    isFetchingAvatar: boolean
-    setEditMode: () => void
 }
 
 export default ProfileInfo

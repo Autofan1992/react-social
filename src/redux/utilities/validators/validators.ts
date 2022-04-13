@@ -1,13 +1,15 @@
 export type FieldValidatorType = (value: string) => string | undefined
 
 export const requiredField: FieldValidatorType = value => {
-    return value ? undefined : 'Это поле обьязательно для заполнения'
+    return value ? undefined : 'This field is required'
 }
 
 export const maxLength = (length: number): FieldValidatorType => value => {
-    return (value.length > length) ? `Макс. длинна сотсавляет ${length} символов` : undefined
+    if(!value?.length) return undefined
+    return (length < value?.length ) ? `Max length is ${length} symbols` : undefined
 }
 
 export const minLength = (length: number): FieldValidatorType => value => {
-    return (value.length < length) ? `Мин. длинна сотсавляет ${length} символов` : undefined
+    if(!value?.length) return undefined
+    return (length > value?.length) ? `Min length is ${length} symbols` : undefined
 }

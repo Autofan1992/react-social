@@ -3,27 +3,28 @@ import { PostType, ProfileType } from '../../types/types'
 import { ThunkAction } from 'redux-thunk'
 import { AppStateType, InferActionTypes } from '../redux-store'
 import { profileAPI } from '../../api/profile-api'
+import { setRequestSuccessToggle } from './app-reducer'
 
 const initialState = {
     posts: [] as Array<PostType>,
     profile: null as ProfileType | null,
     status: null as string | null,
-    isFetchingAvatar: false as boolean,
+    isFetching: false as boolean,
     statusChangeResult: undefined as boolean | undefined,
     avatarChangeResult: undefined as boolean | undefined,
     saveProfileResult: false as boolean
 }
 
 type InitialStateType = typeof initialState
-type ActionTypes = InferActionTypes<typeof actions>
+type ActionTypes = InferActionTypes<typeof profileActions>
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes | FormAction>
 
 const profileReducer = (state = initialState, action: ActionTypes): InitialStateType => {
     switch (action.type) {
-        case 'PROFILE/SET_IS_FETCHING_AVATAR': {
+        case 'PROFILE/SET_IS_FETCHING': {
             return {
                 ...state,
-                isFetchingAvatar: action.payload
+                isFetching: action.payload
             }
         }
         case 'PROFILE/ADD_POST':
@@ -80,7 +81,7 @@ const profileReducer = (state = initialState, action: ActionTypes): InitialState
     }
 }
 
-export const actions = {
+export const profileActions = {
     setNewPost: (text: string) => ({
         type: 'PROFILE/ADD_POST',
         payload: text
@@ -93,8 +94,8 @@ export const actions = {
         type: 'PROFILE/LIKE_POST',
         payload: id
     } as const),
-    setIsFetchingAvatar: (val: boolean) => ({
-        type: 'PROFILE/SET_IS_FETCHING_AVATAR',
+    setIsFetching: (val: boolean) => ({
+        type: 'PROFILE/SET_IS_FETCHING',
         payload: val
     } as const),
     setUserProfile: (profile: ProfileType) => ({
@@ -124,65 +125,73 @@ export const actions = {
 }
 
 export const addPost = (post: string): ThunkType => async dispatch => {
-    dispatch(actions.setNewPost(post))
+    dispatch(profileActions.setNewPost(post))
     dispatch(reset('postForm'))
 }
 
 export const getUserProfile = (userId: number): ThunkType => async dispatch => {
     const data = await profileAPI.getProfile(userId)
-    dispatch(actions.setUserProfile(data))
+    dispatch(profileActions.setUserProfile(data))
 }
 
 export const getUserStatus = (userId: number): ThunkType => async dispatch => {
     const data = await profileAPI.getStatus(userId)
-    dispatch(actions.setStatusSuccess(data))
+    dispatch(profileActions.setStatusSuccess(data))
 }
 
 export const updateUserStatus = (status: string): ThunkType => async dispatch => {
     try {
         const data = await profileAPI.setStatus(status)
         if (data.resultCode === 0) {
-            dispatch(actions.setChangeStatusResponse(true))
-            dispatch(actions.setStatusSuccess(status))
+            await dispatch(setRequestSuccessToggle(true))
+            dispatch(profileActions.setChangeStatusResponse(true))
+            dispatch(profileActions.setStatusSuccess(status))
         } else {
-            dispatch(actions.setChangeStatusResponse(false))
+            await dispatch(setRequestSuccessToggle(false))
+            dispatch(profileActions.setChangeStatusResponse(false))
         }
     } catch (e) {
-        dispatch(actions.setChangeStatusResponse(false))
+        dispatch(profileActions.setChangeStatusResponse(false))
         console.warn(e)
     } finally {
         setTimeout(function () {
-            dispatch(actions.setChangeStatusResponse(undefined))
+            dispatch(profileActions.setChangeStatusResponse(undefined))
         }, 3000)
     }
 }
 
-export const updateUserAvatar = (avatar: File): ThunkType => async dispatch => {
-    dispatch(actions.setIsFetchingAvatar(true))
+export const updateProfileAvatar = (avatar: File): ThunkType => async dispatch => {
+    dispatch(profileActions.setIsFetching(true))
     try {
         const data = await profileAPI.setAvatar(avatar)
         if (data.resultCode === 0) {
-            dispatch(actions.setChangeAvatarResponse(true))
-            dispatch(actions.setAvatarSuccess(data.data.photos))
+            await dispatch(setRequestSuccessToggle(true))
+            dispatch(profileActions.setChangeAvatarResponse(true))
+            dispatch(profileActions.setAvatarSuccess(data.data.photos))
+        } else {
+            await dispatch(setRequestSuccessToggle(false))
         }
     } catch (e) {
-        dispatch(actions.setChangeAvatarResponse(false))
+        dispatch(profileActions.setChangeAvatarResponse(false))
         console.warn(e)
     } finally {
-        dispatch(actions.setIsFetchingAvatar(false))
+        dispatch(profileActions.setIsFetching(false))
         setTimeout(function () {
-            dispatch(actions.setChangeAvatarResponse(undefined))
+            dispatch(profileActions.setChangeAvatarResponse(undefined))
         }, 3000)
     }
 }
 
 export const saveProfile = (profileData: ProfileType): ThunkType => async dispatch => {
+    dispatch(profileActions.setIsFetching(true))
     const data = await profileAPI.saveProfile(profileData)
 
     if (data.resultCode === 0) {
-        dispatch(actions.setUserProfile(profileData))
-        dispatch(actions.setSaveProfileResult(true))
+        dispatch(profileActions.setUserProfile(profileData))
+        dispatch(profileActions.setSaveProfileResult(true))
+        await dispatch(setRequestSuccessToggle(true))
     } else {
+        await dispatch(setRequestSuccessToggle(false))
         const contactTitle = data.messages[0].split(/[( -> )]/)
         const splitTitle = contactTitle[contactTitle.length - 2].toLowerCase()
         const errorObject = {
@@ -192,6 +201,7 @@ export const saveProfile = (profileData: ProfileType): ThunkType => async dispat
         }
         dispatch(stopSubmit('editProfile', errorObject))
     }
+    dispatch(profileActions.setIsFetching(false))
 }
 
 export default profileReducer
