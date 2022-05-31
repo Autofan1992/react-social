@@ -1,7 +1,7 @@
 import reportWebVitals from './reportWebVitals'
 import React from 'react'
 import { render } from 'react-dom'
-import SocialApp from './App'
+import SocialApp from './components/App/App'
 import 'antd/dist/antd.css'
 import './index.scss'
 
