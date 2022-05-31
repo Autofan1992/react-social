@@ -1,27 +1,27 @@
-import { AppStateType } from './redux/redux-store'
-import { getAppInit } from './redux/selectors/app-selectors'
-import { initializeApp } from './redux/reducers/app-reducer'
+import { AppStateType } from '../../redux/redux-store'
+import { getAppInit } from '../../redux/selectors/app-selectors'
+import { initializeApp } from '../../redux/reducers/app-reducer'
 import { connect, ConnectedProps } from 'react-redux'
 import { compose } from 'redux'
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom'
 import { FC, lazy, Suspense, useEffect } from 'react'
-import Preloader from './components/common/Preloader/Preloader'
-import HeaderContainer from './components/Header/HeaderContainer'
-import Navbar from './components/Navbar/Navbar'
-import Login from './components/Login/Login'
-import News from './components/News/News'
-import Music from './components/Music/Music'
-import Settings from './components/Settings/Settings'
-import ToDoListContainer from './components/ToDoList/ToDoListContainer'
-import WeatherContainer from './components/Weather/WeatherContainer'
-import BudgetsContainer from './components/Budgets/BudgetsContainer'
-import NotFound from './components/common/404/404'
-import { getIsAuth } from './redux/selectors/auth-selectors'
-import withSuspense from './hoc/withSuspense'
+import Preloader from '../common/Preloader/Preloader'
+import HeaderContainer from '../Header/HeaderContainer'
+import Navbar from '../Navbar/Navbar'
+import Login from '../Login/Login'
+import News from '../News/News'
+import Music from '../Music/Music'
+import Settings from '../Settings/Settings'
+import ToDoListContainer from '../ToDoList/ToDoListContainer'
+import WeatherContainer from '../Weather/WeatherContainer'
+import BudgetsContainer from '../Budgets/BudgetsContainer'
+import NotFound from '../common/404/404'
+import { getIsAuth } from '../../redux/selectors/auth-selectors'
+import withSuspense from '../../hoc/withSuspense'
 
-const DialogsContainer = lazy(() => import('./components/Dialogs/DialogsContainer'))
-const ProfileContainer = lazy(() => import('./components/Profile/ProfileContainer'))
-const UsersContainer = lazy(() => import('./components/Users/UsersContainer'))
+const DialogsContainer = lazy(() => import('../Dialogs/DialogsContainer'))
+const ProfileContainer = lazy(() => import('../Profile/ProfileContainer'))
+const UsersContainer = lazy(() => import('../Users/UsersContainer'))
 
 const SuspenseProfile = withSuspense(ProfileContainer)
 
